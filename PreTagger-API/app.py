@@ -1,5 +1,6 @@
 #!venv/bin/python3
 
+from 
 from flask import Flask, request, abort, jsonify
 
 # -- API MACROS --
@@ -16,7 +17,7 @@ def index():
 
 @app.route(f"/{NAME}/api/{VER}/Label/", methods=['POST'])
 def Label():
-    requiredFields = ['userId', 'projectId', 'tags', 'type', 'rootDir']
+    requiredFields = ['userId', 'projectId', 'data', 'tags', 'preTags', 'projectType', 'rootDir']
 
     reqJSON = request.json
 
@@ -28,6 +29,10 @@ def Label():
     missingFields = [field for field in requiredFields if field not in reqJSON]
     if len(missingFields) > 0:
         abort(400, description=f'{missingFields} fields were not found in JSON Body.')
+
+    # TODO: Define Target Dir for Tagged Files.
+
+    # TODO: Call PreTaggerOrchestrator.LabelOrchestrator as async method.
     
     pretagDir = "Success."
 
@@ -47,5 +52,8 @@ def resource_not_found(e):
 
 if __name__ == '__main__':
     # Testing and debugging purposes only!
+
+    # TODO: Initialize PreTaggerOrchestrator with bucket name.
+
     # TODO: Change to production before deployment.
     app.run(debug=True)
