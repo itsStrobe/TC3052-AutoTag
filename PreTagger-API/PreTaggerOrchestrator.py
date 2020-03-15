@@ -1,6 +1,24 @@
+import logging
+import boto3
+from botocore.exceptions import ClientError
+
 class PreTaggerOrchestrator:
-    def __init__(self, awsBucket : str):
+    def __init__(self, awsBucket : str = None):
         self.AwsBucket = awsBucket
+        self.s3Client = boto3.client('s3')
+
+    def UploadFile(self, fileLoc : str, objectName : str = None):
+        if(objectName is None):
+            objectName = fileLoc
+
+        try:
+            resp = self.s3Client.upload_file(fileLoc, self.AwsBucket, objectName)
+        except ClientError as e:
+            logging.error(e)
+            return (False, e)
+
+        return (True, "File Submitted Successfully")
+        
 
     # TODO: Make this async.
     def LabelOrchestrator(self, targetDir : str):
