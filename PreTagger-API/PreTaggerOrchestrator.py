@@ -1,23 +1,18 @@
 import logging
+
 import boto3
-from botocore.exceptions import ClientError
+from FileReadWrite import FileController
+
 
 class PreTaggerOrchestrator:
     def __init__(self, awsBucket : str = None):
-        self.AwsBucket = awsBucket
-        self.s3Client = boto3.client('s3')
+        self.fileController = FileController(awsBucket)
+
+    def setAwsBucket(self, awsBucket : str):
+        self.fileController.setAwsBucket(awsBucket)
 
     def UploadFile(self, fileLoc : str, objectName : str = None):
-        if(objectName is None):
-            objectName = fileLoc
-
-        try:
-            resp = self.s3Client.upload_file(fileLoc, self.AwsBucket, objectName)
-        except ClientError as e:
-            logging.error(e)
-            return (False, e)
-
-        return (True, "File Submitted Successfully")
+        return self.fileController.UploadFile(fileLoc, objectName=objectName)
         
 
     # TODO: Make this async.

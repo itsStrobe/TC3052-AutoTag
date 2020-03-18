@@ -1,7 +1,8 @@
 #!venv/bin/python3
 
+from flask import Flask, abort, jsonify, request
+
 from PreTaggerOrchestrator import PreTaggerOrchestrator
-from flask import Flask, request, abort, jsonify
 
 # -- API MACROS --
 NAME = 'PreTagger'
