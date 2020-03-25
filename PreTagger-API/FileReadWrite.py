@@ -3,33 +3,29 @@ import os
 from enum import Enum
 
 import boto3
+from botocore.exceptions import ClientError
+
 import numpy as np
 import pandas as pd
-from botocore.exceptions import ClientError
+from PreTaggerEnums import FileDataType
+from PreTaggerKeywords import DataframeKeywords
 
 # -- FILE PANDAS STRUCTURE -- #
 
 """
 When reading a single file, the content can be retured as is, as a list of rows, as a numpy array or as the following Pandas Data Frame:
-| - Content - |
+| - Dataframekeywords.FILE_CONTENT_COL - |
 
 
 When reading multiple files, these are stored as Pandas for ease of use by the ML Models
 The Pandas is structured as follows:
 
-| - FileName - | - Content - |
+| - DataframeKeywords.FILE_NAME_COL - | - Dataframekeywords.FILE_CONTENT_COL - |
 
 """
 
 LOCAL_TMP_PREFIX = "./tmp/"
 BUCKET_NAME = ""
-
-class FileDataType(Enum):
-    List = 1 # List of rows
-    DataFrame = 2   # Pandas DataFrame
-    Numpy = 3   # Numpy Array
-    Text = 4 # String
-
 
 class FileController:
 
@@ -54,7 +50,7 @@ class FileController:
             return fileLines
         
         if(asType == FileDataType.DataFrame or asType == FileDataType.Numpy):
-            fileDf = pd.read_csv(path, header=None, names=["Content"], index_col=False)
+            fileDf = pd.read_csv(path, header=None, names=[Dataframekeywords.FILE_CONTENT_COL], index_col=False)
 
             if(asType == FileDataType.Numpy):
                 return fileDf.to_numpy()
@@ -86,7 +82,7 @@ class FileController:
         if(asType == FileDataType.DataFrame or asType == FileDataType.Numpy):
             filesContent = [cls.ReadFile(path, asType=FileDataType.Text) for path in paths]
 
-            filesDict = {"FileName" : [os.path.basename(path) for path in paths], "Content" : filesContent}
+            filesDict = {Dataframekeywords.FILE_NAME_COL : [os.path.basename(path) for path in paths], Dataframekeywords.FILE_CONTENT_COL : filesContent}
 
             filesDf = pd.DataFrame.from_dict(filesDict)
 

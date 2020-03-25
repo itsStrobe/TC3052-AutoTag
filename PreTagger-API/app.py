@@ -3,6 +3,7 @@
 from flask import Flask, abort, jsonify, request
 
 from PreTaggerOrchestrator import PreTaggerOrchestrator
+from PreTaggerEnums import FileType, ProjectType
 
 # -- API MACROS --
 NAME = 'PreTagger'
@@ -56,6 +57,23 @@ def Label():
     ValidateJSONFields(reqJSON, requiredFields)
 
     # TODO: Define Target Dir for Tagged Files.
+
+    fileType = None
+    projType = None
+
+    if (fileType == 'TXT'):
+        fileType = FileType.TXT
+    elif (fileType == 'CSV'):
+        fileType = FileType.CSV
+
+    if (projType == "Sentiment Analysis"):
+        projType = ProjectType.SENTIMENT_ANALYSIS
+    elif (projType == "Text Classification"):
+        projType = ProjectType.TEXT_CLASSIFICATION
+    elif (projType == "NER Classification"):
+        projType = ProjectType.NER_CLASSIFICATION
+    elif (projType == "POS Tagging"):
+        projType = ProjectType.POS_TAGGING
 
     # TODO: Call PreTaggerOrchestrator.LabelOrchestrator as async method.
     

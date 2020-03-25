@@ -1,8 +1,11 @@
 import logging
 
 import boto3
-from FileReadWrite import FileController
 
+from FileReadWrite import FileController
+from PreTaggerEnums import FileType, ProjectType
+
+from ProjectManager import ProjectFactory
 
 class PreTaggerOrchestrator:
     def __init__(self, awsBucket : str = None):
@@ -16,9 +19,9 @@ class PreTaggerOrchestrator:
         
 
     # TODO: Make this async.
-    def LabelOrchestrator(self, targetDir : str):
+    def LabelOrchestrator(self, dataDir : str, tagsDir : str, targetDir : str, fileType : FileType, projType : ProjectType):
 
-        # Initialize Project Object based on File Type
+        # Initialize Project Object using ProjectFactory
 
         # Get Files from AWS with FileReader
 
@@ -36,5 +39,7 @@ class PreTaggerOrchestrator:
         # Use Project to Map UnlabeledData results into a Tagged File
 
         # Use FileReader to write UnlabeledData into file in ./tmp/ and upload into AWS
+
+        project = ProjectFactory.createProject(fileType, projType)
 
         return NotImplementedError
