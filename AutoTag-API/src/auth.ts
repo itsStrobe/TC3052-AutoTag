@@ -1,23 +1,16 @@
 import { Request, Response, NextFunction} from 'express';
 
-const OktaJwtVerifier = require('@okta/jwt-verifier');
+const CLIENT_ID = '380242022085-tkcv4ud9fcogv5tq7t8fv6jprn3mt2b8.apps.googleusercontent.com'
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(CLIENT_ID);
 
-const oktaJwtVerifier = new OktaJwtVerifier({
-  clientId: '0oa3692nbbTmZPULC4x6',
-  issuer: 'https://dev-114999.okta.com/oauth2/default'
-});
-
-export async function oktaAuth(req:Request, res:Response, next:NextFunction) {
+export async function facebookAuth(req:Request, res:Response, next:NextFunction) {
   try {
     const token = (req as any).token;
+    console.log(token);
     if (!token) {
       return res.status(401).send('Not Authorised');
     }
-    const jwt = await oktaJwtVerifier.verifyAccessToken(token);
-    req.user = {
-      uid: jwt.claims.uid,
-      email: jwt.claims.sub
-    };
     next();
   }
   catch (err) {

@@ -3,7 +3,7 @@
 
   <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     <button mat-button routerLink="/"><mat-icon>home</mat-icon></button>
-    <button mat-button routerLink="/products">Products</button>
+    <button mat-button routerLink="/projects">Products</button>
     <button mat-button *ngIf="!isAuthenticated" (click)="login()"> Login </button>
     <button mat-button *ngIf="isAuthenticated" (click)="logout()"> Logout </button>
   </div>
@@ -13,7 +13,7 @@
 </mat-toolbar>
 <mat-menu x-position="before" #menu="matMenu">
   <button mat-menu-item routerLink="/"><mat-icon>home</mat-icon> Home</button>
-  <button mat-menu-item routerLink="/products">Products</button>;
+  <button mat-menu-item routerLink="/projects">Products</button>;
   <button mat-menu-item *ngIf="!isAuthenticated" (click)="login()"> Login </button>
   <button mat-menu-item *ngIf="isAuthenticated" (click)="logout()"> Logout </button>
 </mat-menu>

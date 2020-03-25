@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
+import { AuthService, GoogleLoginProvider, SocialUser, FacebookLoginProvider } from 'angularx-social-login';
 
 @Component({
   selector: 'app-root',
@@ -10,21 +10,25 @@ export class AppComponent implements OnInit {
   public title = 'AutoTag';
   public isAuthenticated: boolean;
 
-  constructor(public oktaAuth: OktaAuthService) {
-    this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean) => this.isAuthenticated = isAuthenticated
-    );
-  }
+  constructor(public authService: AuthService) {}
 
-  async ngOnInit() {
-    this.isAuthenticated = await this.oktaAuth.isAuthenticated();
+  ngOnInit() {
+    this.authService.authState.subscribe((user) => {
+      this.isAuthenticated = (user != null);
+    });
   }
 
   login() {
-    this.oktaAuth.loginRedirect();
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
+      .then(x => {
+        console.log(x);
+      })
+      .catch(x => {
+        console.log(x);
+      });
   }
 
   logout() {
-    this.oktaAuth.logout('/');
+    this.authService.signOut().then(x => console.log(x));
   }
 }

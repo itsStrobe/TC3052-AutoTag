@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { OktaCallbackComponent, OktaAuthGuard } from '@okta/okta-angular';
+import { ProjectsComponent } from './projects/projects.component';
 
 const routes: Routes = [
   {
@@ -9,9 +9,9 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'implicit/callback',
-    component: OktaCallbackComponent
-  }
+    path: 'projects',
+    component: ProjectsComponent,
+  },
 ];
 
 @NgModule({

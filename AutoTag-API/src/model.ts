@@ -6,6 +6,9 @@ export class Project {
   id: number;
 
   @Column()
+  ownerUid: string;
+
+  @Column()
   name: string;
 
   @Column()
