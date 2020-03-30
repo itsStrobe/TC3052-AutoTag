@@ -7,3 +7,6 @@ class DataframeKeywords:
     FILE_CONTENT_COL = "Content"
     DATA_COL = "X"
     TAG_COL = "y"
+
+class FileKeywords:
+    SILVER_STANDARD_FILE = "silver_standard.csv"

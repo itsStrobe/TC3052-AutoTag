@@ -14,8 +14,11 @@ class PreTaggerOrchestrator:
     def setAwsBucket(self, awsBucket : str):
         self.fileController.setAwsBucket(awsBucket)
 
-    def UploadFile(self, fileLoc : str, objectName : str = None):
-        return self.fileController.UploadFile(fileLoc, objectName=objectName)
+    def UploadFile(self, fileLoc : str, objectName : str = None, inTmpDir=False):
+        return self.fileController.UploadFile(fileLoc, objectName=objectName, inTmpDir=inTmpDir)
+
+    def DownloadFile(self, objectName : str, fileDest : str = None, inTmpDir=False):
+        return self.fileController.DownloadFile(objectName, fileDest=fileDest, inTmpDir=inTmpDir)
         
 
     # TODO: Make this async.
@@ -42,4 +45,16 @@ class PreTaggerOrchestrator:
 
         project = ProjectFactory.createProject(fileType, projType)
 
-        return NotImplementedError
+        project.extractProjectFiles(dataDir, tagsDir, self.fileController)
+
+        project.extractLabeledAndUnlabeledData()
+
+        project.generatePreTags()
+
+        pred = project.getPredictions()
+
+        self.fileController.WriteFile(pred, targetDir, inTmpDir=True)
+
+        self.UploadFile(targetDir, inTmpDir=True)
+
+        return True

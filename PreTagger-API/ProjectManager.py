@@ -1,8 +1,9 @@
 import abc
 import logging
 
-import Numpy as np
-import Pandas as pd
+import numpy as np
+import pandas as pd
+
 from FileReadWrite import FileController
 from ModelManager import ModelFactory
 from PreTaggerEnums import FileDataType, FileType, ProjectType
@@ -36,20 +37,19 @@ class ProjectInterface(metaclass=abc.ABCMeta):
 
 
 class Project(ProjectInterface):
-    # - VARIABLES - #
-    self.data = None # Pandas DF containing the project's data
-    self.tags = None # Pandas DF containing the project's user-defined tags
-    self.pred = None # Pandas DF containing the project's model-defined tags
-
-    self.labeledData = None # Pandas DF containing the project's labeled data (inclued Tag column)
-    self.unlabeledData = None # Pandas DF containing the project's unlabeled data
-
-    self.tagsMask = None # Pandas DF mask with True if data was user tagged and False if not.
-
-    self.model = None # Model to perform training.
 
     def __init__(self, projType : ProjectType):
-        self.model = ModelFactory.createModel(projType, {})
+        # - VARIABLES - #
+        self.data = None # Pandas DF containing the project's data
+        self.tags = None # Pandas DF containing the project's user-defined tags
+        self.pred = None # Pandas DF containing the project's model-defined tags
+
+        self.labeledData = None # Pandas DF containing the project's labeled data (inclued Tag column)
+        self.unlabeledData = None # Pandas DF containing the project's unlabeled data
+
+        self.tagsMask = None # Pandas DF mask with True if data was user tagged and False if not.
+
+        self.model = ModelFactory.createModel(projType, {}) # Model to perform training.
 
     @staticmethod
     def mapValToDf(target : pd.DataFrame, values : [str], col : str, mask : [int]):
@@ -80,6 +80,10 @@ class Project(ProjectInterface):
     def getProjectData(self):
         return self.data, self.tags
 
+    """Returns the Model's Predictions along with the pre-tagged tags."""
+    def getPredictions(self):
+        return self.pred
+
 
     """Initialize Tags Mask. False if content was not tagged; True if it was user tagged."""
     def initTagsMask(self):
@@ -87,9 +91,9 @@ class Project(ProjectInterface):
             print("self.data or self.tags is NoneType")
             raise TypeError
 
-        self.tagsMask = self.tags.loc[self.tags[DataframeKeywords.FILE_CONTENT_COL] == TagKeywords.UNLABELED_TAG]
+        self.tagsMask = self.tags[DataframeKeywords.FILE_CONTENT_COL] != TagKeywords.UNLABELED_TAG
 
-        logging.log("Tags Mask was created successfully.")
+        logging.info("Tags Mask was created successfully.")
 
 
     def extractLabeledAndUnlabeledData(self):
@@ -123,7 +127,7 @@ class Project(ProjectInterface):
         # Populate UnlabeledData DF
         self.unlabeledData[DataframeKeywords.DATA_COL] = unlabeledData_df[DataframeKeywords.FILE_CONTENT_COL]
 
-        logging.log("Successfully Extracted Labeled and Unlabeled Data rows.")
+        logging.info("Successfully Extracted Labeled and Unlabeled Data rows.")
 
             
     def generatePreTags(self):
@@ -140,11 +144,11 @@ class Project(ProjectInterface):
         self.model.setVocabulary([X_clean, X_clean_unlabeled])
         self.model.setClasses(X_clean)
 
-        self.model.train(X_clean[DataframeKeywords.DATA_COL], X_clean[DataframeKeywords.TAG_COL])
+        self.model.train(X_clean)
 
         pred_vec = self.model.predict(X_clean_unlabeled)
 
-        self.tags = Project.mapValToDf(self.tags, pred_vec, DataframeKeywords.TAG_COL, list(self.unlabeledData.index))
+        self.pred = Project.mapValToDf(self.tags, pred_vec, DataframeKeywords.File, list(self.unlabeledData.index))
 
         return True
 

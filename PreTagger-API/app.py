@@ -1,9 +1,10 @@
 #!venv/bin/python3
-
+import os
 from flask import Flask, abort, jsonify, request
 
 from PreTaggerOrchestrator import PreTaggerOrchestrator
 from PreTaggerEnums import FileType, ProjectType
+from PreTaggerKeywords import FileKeywords
 
 # -- API MACROS --
 NAME = 'PreTagger'
@@ -29,6 +30,21 @@ def ValidateJSONFields(reqJSON, requiredFields : list == []):
 def index():
     return "Hello, world!"
 
+@app.route(f"/{NAME}/debug/{VER}/DownloadFromBucket/", methods=['GET'])
+def DownloadFromBucket():
+    requiredFields = ['fileLoc', 'fileDest']
+
+    reqJSON = request.json
+
+    ValidateJSONFields(reqJSON, requiredFields)
+
+    isDownloaded, message = preTagger.DownloadFile(reqJSON['fileLoc'], fileDest=reqJSON['fileDest'])
+
+    if(not isDownloaded):
+        abort(400, description=message)
+
+    return message
+
 @app.route(f"/{NAME}/debug/{VER}/UploadToBucket/", methods=['POST'])
 def UploadToBucket():
     requiredFields = ['fileLoc', 'fileDest']
@@ -46,7 +62,7 @@ def UploadToBucket():
 
 @app.route(f"/{NAME}/api/{VER}/Label/", methods=['POST'])
 def Label():
-    requiredFields = ['userId', 'projectId', 'fileType', 'projectType', 'dataFile', 'tags']
+    requiredFields = ['userId', 'projectId', 'fileType', 'projectType', 'dataFile', 'tagsFile']
 
     reqJSON = request.json
 
@@ -56,30 +72,42 @@ def Label():
 
     ValidateJSONFields(reqJSON, requiredFields)
 
+    print(reqJSON)
+
     # TODO: Define Target Dir for Tagged Files.
 
     fileType = None
     projType = None
 
-    if (fileType == 'TXT'):
+    if (reqJSON['fileType'] == 'TXT'):
         fileType = FileType.TXT
-    elif (fileType == 'CSV'):
+    elif (reqJSON['fileType'] == 'CSV'):
         fileType = FileType.CSV
 
-    if (projType == "Sentiment Analysis"):
+    if (reqJSON['projectType'] == "Sentiment Analysis"):
         projType = ProjectType.SENTIMENT_ANALYSIS
-    elif (projType == "Text Classification"):
+    elif (reqJSON['projectType'] == "Text Classification"):
         projType = ProjectType.TEXT_CLASSIFICATION
-    elif (projType == "NER Classification"):
+    elif (reqJSON['projectType'] == "NER Classification"):
         projType = ProjectType.NER_CLASSIFICATION
-    elif (projType == "POS Tagging"):
+    elif (reqJSON['projectType'] == "POS Tagging"):
         projType = ProjectType.POS_TAGGING
 
-    # TODO: Call PreTaggerOrchestrator.LabelOrchestrator as async method.
-    
-    pretagDir = "Success."
+    projDir = os.path.join(reqJSON['userId'], reqJSON['projectId'])
 
-    return pretagDir
+    dataDir = os.path.join(projDir, reqJSON['dataFile'])
+    tagsDir = os.path.join(projDir, reqJSON['tagsFile'])
+    predDir = os.path.join(projDir, FileKeywords.SILVER_STANDARD_FILE)
+
+    preTagger.LabelOrchestrator(dataDir, tagsDir, predDir, fileType, projType)
+    
+    pretagDir = {
+        "status" : 200,
+        "message" : f"File with Silver Standard successfully created.",
+        "silver_standard" : predDir
+    }
+
+    return jsonify(pretagDir)
 
 # -- ERROR HANDLING --
 
