@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
 
 const config = new AuthServiceConfig([
   {
@@ -33,7 +34,8 @@ export function provideConfig() {
   declarations: [
     AppComponent,
     HomeComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    TopBarComponent
   ],
   imports: [
     AppRoutingModule,
