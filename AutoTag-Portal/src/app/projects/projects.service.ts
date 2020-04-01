@@ -38,8 +38,8 @@ export class ProjectsService {
     return this.request('get', `${baseUrl}/project`);
   }
 
-  getProject(id: string) {
-    return this.request('get', `${baseUrl}/project/${id}`);
+  getProject(uuid: string) {
+    return this.request('get', `${baseUrl}/project/${uuid}`);
   }
 
   createProject(project: Project) {
@@ -49,10 +49,10 @@ export class ProjectsService {
 
   updateProject(project: Project) {
     console.log('updateProject ' + JSON.stringify(project));
-    return this.request('post', `${baseUrl}/project/${project.id}`, project);
+    return this.request('post', `${baseUrl}/project/${project.uuid}`, project);
   }
 
-  deleteProject(id: string) {
-    return this.request('delete', `${baseUrl}/project/${id}`);
+  deleteProject(uuid: string) {
+    return this.request('delete', `${baseUrl}/project/${uuid}`);
   }
 }

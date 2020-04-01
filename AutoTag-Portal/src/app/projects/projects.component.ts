@@ -30,7 +30,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   async updateProject() {
-    if (this.selectedProject.id !== undefined) {
+    if (this.selectedProject.uuid !== undefined) {
       await this.projectsService.updateProject(this.selectedProject);
     } else {
       await this.projectsService.createProject(this.selectedProject);
@@ -50,7 +50,7 @@ export class ProjectsComponent implements OnInit {
   async deleteProject(project: Project) {
     this.loading = true;
     if (confirm(`Are you sure you want to delete the product ${project.name}. This cannot be undone.`)) {
-      this.projectsService.deleteProject(project.id);
+      this.projectsService.deleteProject(project.uuid);
     }
     await this.refresh();
   }

@@ -1,8 +1,17 @@
 export class Project {
-  id: string;
-  ownerUid: string;
+  uuid: string;
   name: string;
   description: string;
-  createDate: Date;
-  editDate: Date;
+  type: number;
+  dataFormat: string;
+  projectDataFormat: string;
+  projectDataLoc: string;
+  tagsLoc: string;
+  taggedByLoc: string;
+  tags: string;
+  silverStandardLoc: string;
+  status: number;
+  created: Date;
+  lastUpdate: Date;
+  lastLabelSubmission: Date;
 }
