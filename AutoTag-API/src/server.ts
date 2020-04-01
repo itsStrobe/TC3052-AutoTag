@@ -1,9 +1,9 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
-const bearerToken = require('express-bearer-token');
-import {router as projectRouter} from './project'
-import {facebookAuth} from './auth'
+import * as bearerToken from 'express-bearer-token';
+import { facebookAuth } from './auth'
+import { projectRouter } from './api/project';
 
 const app = express()
   .use(cors())

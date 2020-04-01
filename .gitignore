@@ -175,3 +175,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
+config.ts
+*.sqlite

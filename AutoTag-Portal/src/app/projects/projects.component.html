@@ -16,11 +16,11 @@
     </ng-container>
     <ng-container matColumnDef="createDate">
       <th mat-header-cell *matHeaderCellDef> Creation Date</th>
-      <td mat-cell *matCellDef="let project"> {{project.createDate}}</td>
+      <td mat-cell *matCellDef="let project"> {{project.created}}</td>
     </ng-container>
     <ng-container matColumnDef="editDate">
       <th mat-header-cell *matHeaderCellDef> Last Edit</th>
-      <td mat-cell *matCellDef="let project"> {{project.editDate}}</td>
+      <td mat-cell *matCellDef="let project"> {{project.lastUpdate}}</td>
     </ng-container>
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef></th>
@@ -50,7 +50,7 @@
     <label>Description
       <input type="text" [(ngModel)]="selectedProject.description">
     </label>
-    <button mat-flat-button color="primary" (click)="updateProject()">{{(selectedProject.id!==undefined)?'Update':'Create'}}</button>
+    <button mat-flat-button color="primary" (click)="updateProject()">{{(selectedProject.uuid!==undefined)?'Update':'Create'}}</button>
     <button mat-flat-button color="primary" (click)="clearProject()">Clear</button>
   </div>
   <div class="loading" *ngIf="loading">
