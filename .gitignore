@@ -128,7 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Testing dirs
+test/
+tmp/
 
 # compiled output
 **/dist
@@ -174,6 +176,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
 config.ts
 *.sqlite
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
