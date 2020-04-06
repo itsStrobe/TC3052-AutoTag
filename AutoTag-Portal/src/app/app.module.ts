@@ -19,6 +19,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { ProjectsDashboardComponent } from './projects-dashboard/projects-dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { LayoutModule } from '@angular/cdk/layout';
 
 const config = new AuthServiceConfig([
   {
@@ -35,7 +39,8 @@ export function provideConfig() {
     AppComponent,
     HomeComponent,
     ProjectsComponent,
-    TopBarComponent
+    TopBarComponent,
+    ProjectsDashboardComponent
   ],
   imports: [
     AppRoutingModule,
@@ -52,6 +57,9 @@ export function provideConfig() {
     MatProgressSpinnerModule,
     FormsModule,
     SocialLoginModule,
+    MatGridListModule,
+    MatCardModule,
+    LayoutModule,
   ],
   providers: [
     {

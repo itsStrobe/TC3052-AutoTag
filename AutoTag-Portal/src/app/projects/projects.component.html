@@ -1,9 +1,12 @@
 <app-top-bar></app-top-bar>
-
-<button mat-fab color="accent">
+<div class="new-project-button-container">
+  <button mat-fab color="accent" class="new-project-button">
     <mat-icon>add</mat-icon>
   </button>
-
+</div>
+<br><br>
+<app-projects-dashboard></app-projects-dashboard>
+<!--
 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between stretch" class="projects">
   <table mat-table fxFlex="100%" fxFlex.gt-sm="66%" [dataSource]="dataSource" class="mat-elevation-z1">
     <ng-container matColumnDef="name">
@@ -57,3 +60,4 @@
     <mat-spinner></mat-spinner>
   </div>
 </div>
+-->
