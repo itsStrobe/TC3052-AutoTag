@@ -12,6 +12,7 @@ export class ProjectsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description', 'createDate', 'editDate', 'edit', 'delete'];
   dataSource = new MatTableDataSource<any>();
 
+  projects = [];
   selectedProject: Project = new Project();
   loading = false;
 
@@ -26,6 +27,7 @@ export class ProjectsComponent implements OnInit {
     this.loading = true;
     const data = await this.projectsService.getProjects();
     this.dataSource.data = data;
+    this.projects = data;
     this.loading = false;
   }
 

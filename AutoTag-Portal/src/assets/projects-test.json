@@ -1,0 +1,36 @@
+[
+    {
+        "uuid": "1",
+        "name": "Project 1",
+        "description": "Project 1 description",
+        "type": 1,
+        "dataFormat": "Format",
+        "projectDataFormat": "string",
+        "projectDataLoc": "string",
+        "tagsLoc": "string",
+        "taggedByLoc": "string",
+        "tags": "string",
+        "silverStandardLoc": "string",
+        "status": 1,
+        "created": "2014-01-01T23:28:56.782Z",
+        "lastUpdate": "2014-01-01T23:28:56.782Z",
+        "lastLabelSubmission": "2014-01-01T23:28:56.782Z"
+    },
+    {
+        "uuid": "2",
+        "name": "Project 2",
+        "description": "Project 2 description",
+        "type": 1,
+        "dataFormat": "Format",
+        "projectDataFormat": "string",
+        "projectDataLoc": "string",
+        "tagsLoc": "string",
+        "taggedByLoc": "string",
+        "tags": "string",
+        "silverStandardLoc": "string",
+        "status": 1,
+        "created": "2014-01-01T23:28:56.782Z",
+        "lastUpdate": "2014-01-01T23:28:56.782Z",
+        "lastLabelSubmission": "2014-01-01T23:28:56.782Z"
+    }
+]
