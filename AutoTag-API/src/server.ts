@@ -17,10 +17,8 @@ const app = express()
 
 const pjson = require('../package.json');
 
-app.post(`/${pjson.name}/debug/${pjson.version}/DownloadFromBucket/`, (req, res) => {
+app.get(`${pjson.name}/debug/${pjson.version}/DownloadFromBucket/`, async (req, res) => {
   console.log("DEBUG: DownloadFromBucket");
-
-  const awsAccessorServiceInstance = Container.get(AwsAccessorService);
 
   var fileLoc = req.body.fileLoc;
 
@@ -29,18 +27,11 @@ app.post(`/${pjson.name}/debug/${pjson.version}/DownloadFromBucket/`, (req, res)
     return res.status(406).end();
   }
 
-  let awsFile = awsAccessorServiceInstance.tryDownloadFile(fileLoc);
+  const awsAccessorServiceInstance = Container.get(AwsAccessorService);
 
-  if(!awsFile[0]){
-    res.statusMessage = `There are no file in 'fileLoc=${fileLoc}'`;
-    return res.status(400).end();
-  }
+  let awsFile = await awsAccessorServiceInstance.downloadFileAsList(fileLoc);
 
-  let result = {
-    fileContent : awsFile[0]
-  };
-
-  return res.status(200).json(result);
+  return res.status(200).json(awsFile);
 });
 
 app.listen(config.port, (err) => {
