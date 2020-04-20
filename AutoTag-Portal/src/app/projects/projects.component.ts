@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog'
 import { ProjectsService } from './projects.service';
 import { Project } from './project';
+import { NewProjectComponent } from '../new-project/new-project.component';
 
 @Component({
   selector: 'app-projects',
@@ -10,13 +11,12 @@ import { Project } from './project';
 })
 export class ProjectsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description', 'createDate', 'editDate', 'edit', 'delete'];
-  dataSource = new MatTableDataSource<any>();
 
   projects = [];
   selectedProject: Project = new Project();
   loading = false;
 
-  constructor(public projectsService: ProjectsService) {
+  constructor(public projectsService: ProjectsService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -26,7 +26,6 @@ export class ProjectsComponent implements OnInit {
   async refresh() {
     this.loading = true;
     const data = await this.projectsService.getProjects();
-    this.dataSource.data = data;
     this.projects = data;
     this.loading = false;
   }
@@ -37,6 +36,12 @@ export class ProjectsComponent implements OnInit {
     } else {
       await this.projectsService.createProject(this.selectedProject);
     }
+    this.selectedProject = new Project();
+    await this.refresh();
+  }
+
+  async createProject() {
+    await this.projectsService.createProject(this.selectedProject);
     this.selectedProject = new Project();
     await this.refresh();
   }
@@ -55,5 +60,12 @@ export class ProjectsComponent implements OnInit {
       this.projectsService.deleteProject(project.uuid);
     }
     await this.refresh();
+  }
+
+  newProject() {
+    let newProjectDialogRef = this.dialog.open(NewProjectComponent, new MatDialogConfig())
+  }
+  onProjectSelected(project: Project) {
+    this.selectedProject = project;
   }
 }

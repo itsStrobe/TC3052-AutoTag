@@ -13,8 +13,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$AutoTagClient-primary: mat-palette($mat-gray, 900, 400, 900);
-$AutoTagClient-accent: mat-palette($mat-blue, 500, 300, A700);
+$AutoTagClient-primary: mat-palette($mat-gray, 900, 200, 900);
+$AutoTagClient-accent: mat-palette($mat-blue, 600, 400, 800);
 
 // The warn palette is optional (defaults to red).
 $AutoTagClient-warn: mat-palette($mat-red);

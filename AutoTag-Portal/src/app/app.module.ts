@@ -5,14 +5,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list'; 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip'
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider } from 'angularx-social-login';
 
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +25,11 @@ import { ProjectsDashboardComponent } from './projects-dashboard/projects-dashbo
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { LayoutModule } from '@angular/cdk/layout';
+import { NewProjectComponent } from './new-project/new-project.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const config = new AuthServiceConfig([
   {
@@ -40,7 +47,8 @@ export function provideConfig() {
     HomeComponent,
     ProjectsComponent,
     TopBarComponent,
-    ProjectsDashboardComponent
+    ProjectsDashboardComponent,
+    NewProjectComponent
   ],
   imports: [
     AppRoutingModule,
@@ -60,6 +68,16 @@ export function provideConfig() {
     MatGridListModule,
     MatCardModule,
     LayoutModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatListModule
+  ],
+  entryComponents: [
+    NewProjectComponent,
   ],
   providers: [
     {

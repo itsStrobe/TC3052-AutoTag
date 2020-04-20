@@ -1,0 +1,62 @@
+<form [formGroup]="newProjectForm" novalidate (ngSubmit)="onSubmit()">
+  <h2 mat-dialog-title class="accent-light-color">New Project</h2>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" appearance="standard" color="accent">
+          <mat-label>Project title</mat-label>
+          <input matInput placeholder="Project title" formControlName="title" required>
+          <mat-error *ngIf="newProjectForm.controls['title'].hasError('required')">
+            Title is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label id="task-radio-group-label">Task</label>
+        <mat-radio-group aria-labelledby="task-radio-group-label" fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="30px" formControlName="type">
+          <div *ngFor="let name of projectTypeNames; let i = index">
+            <mat-radio-button value="{{i}}">{{name}}</mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" appearance="standard" color="accent">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Description" formControlName="description" cdkTextareaAutosize required></textarea>
+          <mat-error *ngIf="newProjectForm.controls['description'].hasError('required')">
+            Description is <strong>required</strong>
+          </mat-error>
+        </mat-form-field> 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <br>
+        <button mat-raised-button (click)="fileSelect.click()" color="accent" matTooltip="Only txt and csv files!">Select files</button>&nbsp;&nbsp;
+        <button mat-raised-button disabled color="accent" matTooltip="Upload files">Upload files</button>
+        <br><br>
+        <input #fileSelect type="file" multiple style="display:none" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-list class="files-list">
+          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
+          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
+          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
+          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
+          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
+        
+        </mat-list>  
+      </div>
+    </div> 
+  </mat-dialog-content> 
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="accent" type="submit">Submit</button>
+  </mat-dialog-actions>
+</form>
