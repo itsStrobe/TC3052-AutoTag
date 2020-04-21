@@ -148,7 +148,7 @@ class Project(ProjectInterface):
 
         pred_vec = self.model.predict(X_clean_unlabeled)
 
-        self.pred = Project.mapValToDf(self.tags, pred_vec, DataframeKeywords.File, list(self.unlabeledData.index))
+        self.pred = Project.mapValToDf(self.tags, pred_vec, DataframeKeywords.FILE_CONTENT_COL, list(self.unlabeledData.index))
 
         return True
 

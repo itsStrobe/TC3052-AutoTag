@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction} from 'express';
 import FB from 'fb';
-import config = require('./config');
+import config from './config';
 import { getRepository } from './model/repository';
 import { User } from './model/user';
 
