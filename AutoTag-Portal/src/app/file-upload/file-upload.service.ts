@@ -19,10 +19,10 @@ export class FileUploadService {
     const token = authState.authToken;
 
     console.log('request ' + JSON.stringify(data));
-    const result = this.http.request(method, url, {
+    let result = this.http.request(method, url, {
       body: data,
       responseType: 'json',
-      observe: 'events',
+      observe: 'body',
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,9 +33,8 @@ export class FileUploadService {
     });
   }
 
-  public upload(formData) {
-
-    return this.request('post', baseUrl, formData);  
+  public uploadFiles(files, uuid: string) {
+    return this.request('post', `${baseUrl}/file-upload/${uuid}`, files);  
   }
   
 }

@@ -8,7 +8,7 @@ export class Project {
   projectDataLoc: string;
   tagsLoc: string;
   taggedByLoc: string;
-  tags: string;
+  tags: string[];
   silverStandardLoc: string;
   status: number;
   created: Date;

@@ -14,8 +14,9 @@
     </div>
     <div class="row">
       <div class="col">
-        <label id="task-radio-group-label">Task</label>
-        <mat-radio-group aria-labelledby="task-radio-group-label" fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="30px" formControlName="type">
+        <label id="task-radio-group-label" class="md-required" >Task *</label>
+        <mat-radio-group aria-labelledby="task-radio-group-label" fxLayout="row wrap" fxLayoutAlign="left center"
+          fxLayoutGap="30px" formControlName="type" required>
           <div *ngFor="let name of projectTypeNames; let i = index">
             <mat-radio-button value="{{i}}">{{name}}</mat-radio-button>
           </div>
@@ -26,37 +27,65 @@
       <div class="col">
         <mat-form-field class="full-width" appearance="standard" color="accent">
           <mat-label>Description</mat-label>
-          <textarea matInput placeholder="Description" formControlName="description" cdkTextareaAutosize required></textarea>
+          <textarea matInput placeholder="A short description of your project" formControlName="description" cdkTextareaAutosize
+            required></textarea>
           <mat-error *ngIf="newProjectForm.controls['description'].hasError('required')">
             Description is <strong>required</strong>
           </mat-error>
-        </mat-form-field> 
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width" appearance="standard" color="accent">
+          <mat-label>Tags</mat-label>
+          <mat-chip-list #tagsChipList formControlName="tags" required>
+            <mat-chip *ngFor="let tag of tags" selectable
+                removable (removed)="removeTag(tag)">
+              {{tag}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+              <input MatChipInput placeholder="Your documents' tags" [matChipInputFor]="tagsChipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                matChipInputAddOnBlur
+                (matChipInputTokenEnd)="addTag($event)">
+          </mat-chip-list>
+          <mat-hint>Hint: Tags for a Sentiment Analysis project might include: happy, sad, etc.</mat-hint>
+          <mat-error *ngIf="newProjectForm.controls['tags'].hasError('required')">
+            At least one tag is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
     <div class="row">
       <div class="col">
         <br>
-        <button mat-raised-button (click)="fileSelect.click()" color="accent" matTooltip="Only txt and csv files!">Select files</button>&nbsp;&nbsp;
-        <button mat-raised-button disabled color="accent" matTooltip="Upload files">Upload files</button>
+        <button mat-raised-button (click)="onClickFileUpload()" color="accent"
+          matTooltip="Only txt files!" type="button">Upload files</button>&nbsp;&nbsp;
+        <button mat-raised-button [disabled]="files.length == 0" color="warn" (click)="removeAllFiles()" 
+          matTooltip="Delete files" type="button">Delete files</button>
         <br><br>
-        <input #fileSelect type="file" multiple style="display:none" />
+        <input #fileUpload type="file"  accept=".txt" multiple style="display:none" />
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <mat-list class="files-list">
-          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
-          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
-          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
-          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
-          <mat-list-item>file<button mat-icon-button><mat-icon>cancel</mat-icon></button></mat-list-item>
-        
-        </mat-list>  
+        <p *ngIf="files.length === 0">Upload your training examples as .txt files.</p>
+        <label *ngIf="files.length > 0">Files to upload:</label>
+        <mat-list dense class="files-list">
+          <mat-list-item *ngFor="let file of files">
+            <h4 matLine>{{file.name}}</h4>
+            <button mat-icon-button (click)="removeFile(file)" type="button">
+              <mat-icon class="cancel-file">cancel</mat-icon>
+            </button>
+            <mat-divider inset></mat-divider>
+          </mat-list-item>
+        </mat-list>
       </div>
-    </div> 
-  </mat-dialog-content> 
+    </div>
+  </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-raised-button color="accent" type="submit">Submit</button>
+    <button mat-raised-button color="accent" [disabled]="!newProjectForm.valid" type="submit">Submit</button>
   </mat-dialog-actions>
 </form>
