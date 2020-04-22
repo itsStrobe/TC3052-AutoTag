@@ -9,7 +9,7 @@ from ProjectManager import ProjectFactory
 
 class PreTaggerOrchestrator:
     def __init__(self, awsBucket : str = None):
-        self.fileController = FileController(awsBucket)
+        self.fileController = FileController(awsBucket=awsBucket)
 
     def setAwsBucket(self, awsBucket : str):
         self.fileController.setAwsBucket(awsBucket)

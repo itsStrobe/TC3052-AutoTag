@@ -11,7 +11,7 @@ NAME = 'PreTagger'
 VER = 'v0.1'
 BUCKET_NAME = "autotag-storage-us-east"
 
-preTagger = PreTaggerOrchestrator()
+preTagger = PreTaggerOrchestrator(awsBucket=BUCKET_NAME)
 
 app = Flask(__name__)
 
@@ -120,12 +120,3 @@ def bad_request(e):
 @app.errorhandler(404)
 def resource_not_found(e):
     return jsonify(error=str(e)), 404
-
-if __name__ == '__main__':
-    # Testing and debugging purposes only!
-
-    # TODO: Initialize PreTaggerOrchestrator with bucket name.
-    preTagger = PreTaggerOrchestrator(BUCKET_NAME)
-
-    # TODO: Change to production before deployment.
-    app.run(debug=True)

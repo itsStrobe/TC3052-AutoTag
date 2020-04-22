@@ -146,13 +146,17 @@ class FileController:
 
         return self.ReadFiles(localFilePaths, asType=asType)
 
-    def DownloadFile(self, objectName : str, fileDest : str = None):
+    def DownloadFile(self, objectName : str, fileDest : str = None, inTmpDir=False):
         print(f"Downloading file {objectName}")
 
         if(fileDest is None):
             fileDest = objectName
 
         fileDir = os.path.dirname(fileDest)
+
+        if(inTmpDir):
+            fileDest = os.path.join(LOCAL_TMP_PREFIX, fileDest)
+
         if not os.path.exists(fileDir):
             os.makedirs(fileDir)
             print(f"Directory {fileDir} created.")
