@@ -8,56 +8,5 @@
 <div class="loading" *ngIf="loading">
   <mat-spinner color="accent"></mat-spinner>
 </div>
-<app-projects-dashboard [projects]="projects" (projectSelected)="onProjectSelected($event)" *ngIf="!loading"></app-projects-dashboard>
-<!--
-<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between stretch" class="projects">
-  <table mat-table fxFlex="100%" fxFlex.gt-sm="66%" [dataSource]="dataSource" class="mat-elevation-z1">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name</th>
-      <td mat-cell *matCellDef="let project"> {{project.name}}</td>
-    </ng-container>
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef> Description</th>
-      <td mat-cell *matCellDef="let project"> {{project.description}}</td>
-    </ng-container>
-    <ng-container matColumnDef="createDate">
-      <th mat-header-cell *matHeaderCellDef> Creation Date</th>
-      <td mat-cell *matCellDef="let project"> {{project.created}}</td>
-    </ng-container>
-    <ng-container matColumnDef="editDate">
-      <th mat-header-cell *matHeaderCellDef> Last Edit</th>
-      <td mat-cell *matCellDef="let project"> {{project.lastUpdate}}</td>
-    </ng-container>
-    <ng-container matColumnDef="edit">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let project">
-        <button mat-icon-button (click)="editProject(project)">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let project">
-        <button mat-icon-button (click)="deleteProject(project)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  <mat-divider fxShow="false" fxShow.gt-sm [vertical]="true"></mat-divider>
-  <div>
-    <h2>Selected Project</h2>
-    <label>Name
-      <input type="text" [(ngModel)]="selectedProject.name">
-    </label>
-    <label>Description
-      <input type="text" [(ngModel)]="selectedProject.description">
-    </label>
-    <button mat-flat-button color="primary" (click)="updateProject()">{{(selectedProject.uuid!==undefined)?'Update':'Create'}}</button>
-    <button mat-flat-button color="primary" (click)="clearProject()">Clear</button>
-  </div>
-</div>
--->
+<app-projects-dashboard [projects]="projects" (projectSelected)="onProjectSelected($event)"
+  (projectUpdate)="onProjectUpdate($event)" *ngIf="!loading"></app-projects-dashboard>

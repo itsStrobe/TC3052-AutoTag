@@ -2,12 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ProjectTypeUtil, ProjectType, Project } from '../projects/project';
 import { CustomValidators } from '../form-validators/custom-validators'
-import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileUploadService } from '../file-upload/file-upload.service'
-import { of } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -25,13 +22,13 @@ export class NewProjectComponent implements OnInit {
   newProjectForm = this.fb.group({
     title: [null, Validators.required],
     description: [null, Validators.required],
-    type: [null, Validators.required], 
+    type: [null, Validators.required],
     tags: [this.tags, CustomValidators.validateRequired],
     files: [this.files, CustomValidators.validateRequired]
   });
 
-  constructor(private fb: FormBuilder, private uploadService: FileUploadService,
-     public dialogRef: MatDialogRef<NewProjectComponent>) { }
+  constructor(private fb: FormBuilder,
+    public dialogRef: MatDialogRef<NewProjectComponent>) { }
 
   ngOnInit() {
     // Get all numeric keys in `ProjectType` enum.
@@ -85,7 +82,7 @@ export class NewProjectComponent implements OnInit {
     }
   }
 
-  removeTag(tag) { 
+  removeTag(tag) {
     const index = this.tags.indexOf(tag);
 
     if (index >= 0) {

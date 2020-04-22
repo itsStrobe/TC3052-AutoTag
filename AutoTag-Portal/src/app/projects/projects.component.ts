@@ -5,6 +5,7 @@ import { Project } from './project';
 import { NewProjectComponent } from '../new-project/new-project.component';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UpdateProjectComponent } from '../update-project/update-project.component';
 
 @Component({
   selector: 'app-projects',
@@ -87,5 +88,14 @@ export class ProjectsComponent implements OnInit {
 
   onProjectSelected(project: Project) {
     this.selectedProject = project;
+  }
+
+  onProjectUpdate(project: Project) {
+    let projectUpdateDialogRef = this.dialog.open(UpdateProjectComponent, {
+      data: {
+        project: project
+      }
+    });
+    
   }
 }

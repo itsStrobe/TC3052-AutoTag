@@ -32,7 +32,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips'; 
-import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { UpdateProjectComponent } from './update-project/update-project.component'; 
 
 const config = new AuthServiceConfig([
   {
@@ -51,7 +52,8 @@ export function provideConfig() {
     ProjectsComponent,
     TopBarComponent,
     ProjectsDashboardComponent,
-    NewProjectComponent
+    NewProjectComponent,
+    UpdateProjectComponent
   ],
   imports: [
     AppRoutingModule,
@@ -84,6 +86,7 @@ export function provideConfig() {
   ],
   entryComponents: [
     NewProjectComponent,
+    UpdateProjectComponent
   ],
   providers: [
     {

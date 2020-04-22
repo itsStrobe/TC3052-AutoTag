@@ -12,6 +12,7 @@ import { Project, ProjectTypeUtil } from '../projects/project';
 export class ProjectsDashboardComponent implements OnInit, OnChanges {
   @Input() projects: Project[];
   @Output() projectSelected = new EventEmitter<Project>();
+  @Output() projectUpdate = new EventEmitter<Project>();
   cards = null;
   /** Based on the screen size, switch from standard to one column per row */
   columns = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
@@ -50,6 +51,10 @@ export class ProjectsDashboardComponent implements OnInit, OnChanges {
   }
 
   selectProject(project: Project) {
-    this.projectSelected.emit(project)
+    this.projectSelected.emit(project);
+  }
+
+  updateProject(project: Project) {
+    this.projectUpdate.emit(project);
   }
 }
