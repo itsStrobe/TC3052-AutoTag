@@ -63,12 +63,13 @@
         <button mat-raised-button [disabled]="files.length == 0" color="warn" (click)="removeAllFiles()"
           matTooltip="Delete files" type="button">Delete files</button>
         <br><br>
-        <input #fileUpload type="file" accept=".txt" multiple style="display:none" />
+        <input #fileUpload type="file" accept=".txt, .csv" multiple style="display:none" />
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <p *ngIf="files.length === 0">Upload your training examples as .txt files.</p>
+        <p *ngIf="files.length === 0">Upload your training examples as either a single .csv file or multiple .txt files
+          with one example per file.</p>
         <label *ngIf="files.length > 0">Files to upload:</label>
         <mat-list dense class="files-list">
           <mat-list-item *ngFor="let file of files">

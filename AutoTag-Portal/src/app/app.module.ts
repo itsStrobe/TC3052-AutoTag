@@ -32,7 +32,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips'; 
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { UpdateProjectComponent } from './update-project/update-project.component'; 
 
 const config = new AuthServiceConfig([
@@ -92,6 +92,9 @@ export function provideConfig() {
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, 
+      useValue: { duration: 3000 }
     }
   ],
   bootstrap: [AppComponent]

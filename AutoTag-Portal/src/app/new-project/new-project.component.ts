@@ -4,7 +4,6 @@ import { ProjectTypeUtil, ProjectType, Project } from '../projects/project';
 import { CustomValidators } from '../form-validators/custom-validators'
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FileUploadService } from '../file-upload/file-upload.service'
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -46,10 +45,22 @@ export class NewProjectComponent implements OnInit {
     fileUpload.onchange = () => {
       for (let i = 0; i < fileUpload.files.length; i++) {
         this.files.push({ name: fileUpload.files[i].name, data: fileUpload.files[i] });
+        this.validateOneCsvFile();
         this.newProjectForm.controls['files'].updateValueAndValidity();
       }
     };
     fileUpload.click();
+  }
+
+  // Makes sure that there is either only one .csv file or multiple .txt files.
+  // If there is more than one .csv file or the file types are mixed, it will delete
+  // every file from `this.files` except for the first .csv file in the array.
+  validateOneCsvFile() {
+    const firstCsvFile = this.files.find(file => file.data.type === 'text/csv');
+    if (firstCsvFile !== undefined) {
+      this.files.length = 0 // Deletes elements in array without losing reference to actual array.
+      this.files.push(firstCsvFile);
+    }
   }
 
   removeFile(file) {
@@ -62,7 +73,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   removeAllFiles() {
-    this.files = [];
+    this.files.length = 0; // Deletes elements in array without losing reference to actual array.
     this.newProjectForm.controls['files'].updateValueAndValidity();
   }
 
@@ -99,7 +110,7 @@ export class NewProjectComponent implements OnInit {
     newProject.tags = this.newProjectForm.get('tags').value;
     newProject.created = new Date();
     newProject.lastUpdate = new Date();
-    newProject.dataFormat = "txt";
+    newProject.dataFormat = this.files[0].data.type;
 
     let filesData = this.files.map(file => file.data);
 

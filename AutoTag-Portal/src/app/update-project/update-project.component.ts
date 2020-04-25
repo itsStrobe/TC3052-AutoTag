@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Project } from '../projects/project';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './update-project.component.html',
   styleUrls: ['./update-project.component.scss']
 })
-export class UpdateProjectComponent implements OnInit {
+export class UpdateProjectComponent {
   project: Project = this.data.project;
   newProjectForm = this.fb.group({
     title: [this.project.name, Validators.required],
@@ -19,12 +19,8 @@ export class UpdateProjectComponent implements OnInit {
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<UpdateProjectComponent>) { }
 
-  ngOnInit() {
-  }
-
   onDelete() {
-    let confirmation = confirm('Are you sure you want to delete the project?');
-    if (confirmation) {
+    if (confirm('Are you sure you want to delete the project?')) {
       this.dialogRef.close({ project: null, delete: true });
     }
   }

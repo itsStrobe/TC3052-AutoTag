@@ -18,7 +18,7 @@ export class ProjectsComponent implements OnInit {
   loading = false;
 
   constructor(public projectsService: ProjectsService, public fileUploadService: FileUploadService,
-     public dialog: MatDialog, private snackBar: MatSnackBar) { }
+    public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.refresh();
@@ -62,9 +62,7 @@ export class ProjectsComponent implements OnInit {
 
   async deleteProject(project: Project) {
     this.loading = true;
-    if (confirm(`Are you sure you want to delete the product ${project.name}. This cannot be undone.`)) {
-      this.projectsService.deleteProject(project.uuid);
-    }
+    this.projectsService.deleteProject(project.uuid);
     await this.refresh();
   }
 
@@ -78,11 +76,16 @@ export class ProjectsComponent implements OnInit {
     let newProjectDialogRef = this.dialog.open(NewProjectComponent, new MatDialogConfig());
     let files: File[];
     newProjectDialogRef.afterClosed().subscribe(async result => {
-      this.selectedProject = result.project;
-      files = result.files;
-      let snackBarRef = this.snackBar.open(`Creating project "${this.selectedProject.name}" and uploading files`, 'Dismiss');
-      let newProject = await this.updateProject();
-      this.uploadFiles(files, newProject.uuid);
+      if (result) {
+        this.selectedProject = result.project;
+        files = result.files;
+        console.log(files);
+        let snackBarRef = this.snackBar.open(
+          `Creating project "${this.selectedProject.name}" and uploading files. Please do not close this tab.`, 
+          'Dismiss');
+        let newProject = await this.updateProject();
+        this.uploadFiles(files, newProject.uuid);
+      }
     });
   }
 
@@ -96,6 +99,20 @@ export class ProjectsComponent implements OnInit {
         project: project
       }
     });
-    
+
+    projectUpdateDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.delete) {
+          let snackBarRef = this.snackBar.open(`Deleting project "${project.name}"`,
+            'Dismiss');
+          this.deleteProject(project);
+        } else {
+          let snackBarRef = this.snackBar.open(`Updating project "${project.name}"`,
+            'Dismiss');
+          this.selectedProject = result.project;
+          this.updateProject();
+        }
+      }
+    })
   }
 }
