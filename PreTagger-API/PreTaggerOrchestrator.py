@@ -25,36 +25,30 @@ class PreTaggerOrchestrator:
     def LabelOrchestrator(self, dataDir : str, tagsDir : str, targetDir : str, fileType : FileType, projType : ProjectType):
 
         # Initialize Project Object using ProjectFactory
-
-        # Get Files from AWS with FileReader
-
-        # Use Project to Parse Files into Pandas
-
-        # Use Project to get LabeledData, UnlabeledData from Parsed Files
-
         # Initialize Model class based on Model Needed
-        # - PreProcess Labeled, UnlabaledData
-        
-        # Train Model
-
-        # Get Predictions
-
-        # Use Project to Map UnlabeledData results into a Tagged File
-
-        # Use FileReader to write UnlabeledData into file in ./tmp/ and upload into AWS
 
         project = ProjectFactory.createProject(fileType, projType)
 
+        # Get Files from AWS with FileReader
+        # Use Project to Parse Files into Pandas
+
         project.extractProjectFiles(dataDir, tagsDir, self.fileController)
+
+        # Use Project to get LabeledData, UnlabeledData from Parsed Files
 
         project.extractLabeledAndUnlabeledData()
 
-        project.generatePreTags()
+        # PreProcess Labeled, UnlabaledData
+        # Train Model
+        # Get Predictions
+        # Use Project to Map UnlabeledData results into a Tagged File
 
+        project.generatePreTags()
         pred = project.getPredictions()
 
-        self.fileController.WriteFile(pred, targetDir, inTmpDir=True)
+        # Use FileReader to write UnlabeledData into file in ./tmp/ and upload into AWS
 
+        self.fileController.WriteFile(pred, targetDir, inTmpDir=True)
         self.UploadFile(targetDir, inTmpDir=True)
 
         return True
