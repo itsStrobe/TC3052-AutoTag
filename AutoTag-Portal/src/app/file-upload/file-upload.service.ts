@@ -8,7 +8,7 @@ const baseUrl = 'http://localhost:4201';
 @Injectable({
   providedIn: 'root'
 })
-export class FileUploadService {  
+export class FileUploadService {
 
   constructor(public authService: AuthService, private http: HttpClient) { }
 
@@ -19,7 +19,7 @@ export class FileUploadService {
     const token = authState.authToken;
 
     console.log('request ' + JSON.stringify(data));
-    let result = this.http.request(method, url, {
+    const result = this.http.request(method, url, {
       body: data,
       responseType: 'json',
       observe: 'body',
@@ -34,7 +34,7 @@ export class FileUploadService {
   }
 
   public uploadFiles(files, uuid: string) {
-    return this.request('post', `${baseUrl}/file-upload/${uuid}`, files);  
+    return this.request('post', `${baseUrl}/file-upload/${uuid}`, files);
   }
-  
+
 }

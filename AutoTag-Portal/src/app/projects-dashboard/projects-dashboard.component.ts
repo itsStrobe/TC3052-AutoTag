@@ -36,8 +36,8 @@ export class ProjectsDashboardComponent implements OnInit, OnChanges {
         lastUpdate: project.lastUpdate,
         description: project.description,
         projectType: ProjectTypeUtil.getProjectTypeName(project.type),
-        project: project
-      }
+        project
+      };
     });
   }
 
@@ -46,8 +46,9 @@ export class ProjectsDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["projects"])
+    if (changes.projects) {
       this.setCards();
+    }
   }
 
   selectProject(project: Project) {

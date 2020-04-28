@@ -17,7 +17,7 @@ export class UpdateProjectComponent {
   });
 
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<UpdateProjectComponent>) { }
+              public dialogRef: MatDialogRef<UpdateProjectComponent>) { }
 
   onDelete() {
     if (confirm('Are you sure you want to delete the project?')) {
