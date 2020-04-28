@@ -94,9 +94,9 @@ projectRouter.delete('/project/:uuid', async function (req: Request, res: Respon
           uuid: req.params.uuid,
       },
     });
-    await repository.delete(project);
+    await repository.delete(project.uuid);
     console.log((req as any).user.name + ': Delete project ' + req.params.uuid);
-    res.send('OK');
+    res.send(null);
   }
   catch (err) {
     return next(err);

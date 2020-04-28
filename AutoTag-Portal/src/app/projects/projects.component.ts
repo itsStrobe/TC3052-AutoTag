@@ -59,14 +59,6 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject = new Project();
   }
 
-  async deleteProject(project: Project) {
-    this.loading = true;
-    if (confirm(`Are you sure you want to delete the product ${project.name}. This cannot be undone.`)) {
-      this.projectsService.deleteProject(project.uuid);
-    }
-    await this.refresh();
-  }
-
   async uploadFiles(files: File[], uuid: string) {
     this.loading = true;
     await this.fileUploadService.uploadFiles(files, uuid);
@@ -87,5 +79,11 @@ export class ProjectsComponent implements OnInit {
 
   onProjectSelected(project: Project) {
     this.selectedProject = project;
+  }
+
+  async onProjectDeleted(project: Project) {
+    this.loading = true;
+    await this.projectsService.deleteProject(project.uuid);
+    await this.refresh();
   }
 }
