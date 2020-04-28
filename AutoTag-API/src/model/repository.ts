@@ -1,7 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, createConnection, Connection, Repository, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
+import {createConnection, Connection, Repository} from 'typeorm';
 import { Project } from './project';
 import { User } from './user';
 import { Assignment } from './assignment';
+import { Tag } from './tag';
 
 let connection:Connection;
 
@@ -19,6 +20,7 @@ export async function getRepository<Entity>(target: ObjectType<Entity>): Promise
         Project,
         User,
         Assignment,
+        Tag,
       ],
     });
   }
