@@ -5,13 +5,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list'; 
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar'; 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider } from 'angularx-social-login';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -31,10 +31,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatChipsModule } from '@angular/material/chips'; 
+import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { UpdateProjectComponent } from './update-project/update-project.component'; 
-import { ConfirmationDialogComponent } from './utils/dialog/confirmation-dialog/confirmation-dialog.component'; 
+import { UpdateProjectComponent } from './update-project/update-project.component';
+import { ConfirmationDialogComponent } from './utils/dialog/confirmation-dialog/confirmation-dialog.component';
 
 
 const config = new AuthServiceConfig([
@@ -55,7 +55,7 @@ export function provideConfig() {
     TopBarComponent,
     ProjectsDashboardComponent,
     NewProjectComponent,
-    UpdateProjectComponent
+    UpdateProjectComponent,
     ConfirmationDialogComponent
   ],
   imports: [
@@ -96,7 +96,7 @@ export function provideConfig() {
       provide: AuthServiceConfig,
       useFactory: provideConfig
     },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, 
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000 }
     }
   ],

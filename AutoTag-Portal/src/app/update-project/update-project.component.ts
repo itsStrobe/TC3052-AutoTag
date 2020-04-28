@@ -19,15 +19,9 @@ export class UpdateProjectComponent {
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<UpdateProjectComponent>) { }
 
-  onDelete() {
-    if (confirm('Are you sure you want to delete the project?')) {
-      this.dialogRef.close({ project: null, delete: true });
-    }
-  }
-
   onSubmit() {
     this.project.name = this.newProjectForm.get('title').value;
     this.project.description = this.newProjectForm.get('description').value;
-    this.dialogRef.close({ project: this.project, delete: false });
+    this.dialogRef.close(this.project);
   }
 }

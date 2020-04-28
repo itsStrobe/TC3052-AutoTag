@@ -95,23 +95,19 @@ export class ProjectsComponent implements OnInit {
       }
     });
 
-    projectUpdateDialogRef.afterClosed().subscribe(result => {
+    projectUpdateDialogRef.afterClosed().subscribe(async result => {
       if (result) {
-        if (result.delete) {
-          const snackBarRef = this.snackBar.open(`Deleting project "${project.name}"`,
-            'Dismiss');
-          this.deleteProject(project);
-        } else {
-          const snackBarRef = this.snackBar.open(`Updating project "${project.name}"`,
-            'Dismiss');
-          this.selectedProject = result.project;
-          this.updateProject();
-        }
+        const snackBarRef = this.snackBar.open(`Updating project "${project.name}"`,
+          'Dismiss');
+        this.selectedProject = result.project;
+        await this.updateProject();
       }
     });
   }
 
   async onProjectDeleted(project: Project) {
+    const snackBarRef = this.snackBar.open(`Deleting project "${project.name}"`,
+          'Dismiss');
     this.loading = true;
     await this.projectsService.deleteProject(project.uuid);
     await this.refresh();

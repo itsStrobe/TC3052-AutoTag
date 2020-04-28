@@ -6,10 +6,14 @@
         <mat-card-header>
           <mat-card-title class="accent-light-color">
             {{card.title}}
-            <button mat-icon-button (click)="updateProject(card.project)" onclick="this.blur()"
-              class="settings-button accent-light-color">
+            <button mat-icon-button onclick="this.blur()"
+              class="settings-button accent-light-color" [matMenuTriggerFor]="menu">
               <mat-icon>settings</mat-icon>
             </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="updateProject(card.project)">Update</button>
+              <button mat-menu-item (click)="deleteProject(card.project)">Delete</button>
+            </mat-menu>
           </mat-card-title>
           <mat-card-subtitle class="accent-light-color">
             {{card.projectType}}<br>
