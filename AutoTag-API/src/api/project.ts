@@ -94,9 +94,55 @@ projectRouter.delete('/project/:uuid', async function (req: Request, res: Respon
           uuid: req.params.uuid,
       },
     });
-    await repository.delete(project);
+    await repository.delete(project.uuid);
     console.log((req as any).user.name + ': Delete project ' + req.params.uuid);
-    res.send('OK');
+    res.send(null);
+  }
+  catch (err) {
+    return next(err);
+  }
+});
+
+projectRouter.get('/project/:uuid/dataBatch', async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const page = req.query.page;
+    const limit = req.query.limit;
+    // TODO: Implement request
+    console.log((req as any).user.email + ': Get project data batch ' + req.params.uuid);
+    res.send(null);
+  }
+  catch (err) {
+    return next(err);
+  }
+});
+
+projectRouter.post('/project/:uuid/dataTag', async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Implement request
+    console.log((req as any).user.name + ': Update project data tag ' + req.params.id);
+    res.send(null);
+  }
+  catch (err) {
+    return next(err);
+  }
+});
+
+projectRouter.get('/project/:uuid/export', async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Implement request
+    console.log((req as any).user.email + ': Export project ' + req.params.uuid);
+    res.send(null);
+  }
+  catch (err) {
+    return next(err);
+  }
+});
+
+projectRouter.get('/project/:uuid/download', async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Implement request
+    console.log((req as any).user.email + ': Download project ' + req.params.uuid);
+    res.send(null);
   }
   catch (err) {
     return next(err);

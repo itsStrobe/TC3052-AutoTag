@@ -60,12 +60,6 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject = new Project();
   }
 
-  async deleteProject(project: Project) {
-    this.loading = true;
-    this.projectsService.deleteProject(project.uuid);
-    await this.refresh();
-  }
-
   async uploadFiles(files: File[], uuid: string) {
     this.loading = true;
     await this.fileUploadService.uploadFiles(files, uuid);
@@ -93,6 +87,7 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject = project;
   }
 
+
   onProjectUpdate(project: Project) {
     const projectUpdateDialogRef = this.dialog.open(UpdateProjectComponent, {
       data: {
@@ -114,5 +109,11 @@ export class ProjectsComponent implements OnInit {
         }
       }
     });
+  }
+
+  async onProjectDeleted(project: Project) {
+    this.loading = true;
+    await this.projectsService.deleteProject(project.uuid);
+    await this.refresh();
   }
 }

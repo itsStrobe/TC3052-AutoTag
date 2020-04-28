@@ -9,4 +9,4 @@
   <mat-spinner color="accent"></mat-spinner>
 </div>
 <app-projects-dashboard [projects]="projects" (projectSelected)="onProjectSelected($event)"
-  (projectUpdate)="onProjectUpdate($event)" *ngIf="!loading"></app-projects-dashboard>
+  (projectUpdate)="onProjectUpdate($event)" (projectDeleted)="onProjectDeleted($event)" *ngIf="!loading"></app-projects-dashboard>
