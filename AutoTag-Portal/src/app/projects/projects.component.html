@@ -8,7 +8,7 @@
 <div class="loading" *ngIf="loading">
   <mat-spinner color="accent"></mat-spinner>
 </div>
-<app-projects-dashboard [projects]="projects" (projectSelected)="onProjectSelected($event)" *ngIf="!loading"></app-projects-dashboard>
+<app-projects-dashboard [projects]="projects" (projectSelected)="onProjectSelected($event)" (projectDeleted)="onProjectDeleted($event)" *ngIf="!loading"></app-projects-dashboard>
 <!--
 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between stretch" class="projects">
   <table mat-table fxFlex="100%" fxFlex.gt-sm="66%" [dataSource]="dataSource" class="mat-elevation-z1">
