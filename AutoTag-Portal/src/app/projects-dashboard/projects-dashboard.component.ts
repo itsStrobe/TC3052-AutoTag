@@ -14,6 +14,7 @@ import { ConfirmationDialogComponent } from '../utils/dialog/confirmation-dialog
 export class ProjectsDashboardComponent implements OnInit, OnChanges {
   @Input() projects: Project[];
   @Output() projectSelected = new EventEmitter<Project>();
+  @Output() projectUpdate = new EventEmitter<Project>();
   @Output() projectDeleted = new EventEmitter<Project>();
   cards = null;
   /** Based on the screen size, switch from standard to one column per row */
@@ -49,13 +50,17 @@ export class ProjectsDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["projects"]) {
+    if (changes.projects) {
       this.setCards();
     }
   }
 
   selectProject(project: Project) {
     this.projectSelected.emit(project);
+  }
+
+  updateProject(project: Project) {
+    this.projectUpdate.emit(project);
   }
 
   deleteProject(project: Project) {

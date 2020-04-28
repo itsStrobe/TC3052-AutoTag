@@ -24,16 +24,16 @@ export enum ProjectType {
 }
 
 export class ProjectTypeUtil {
-  public static getProjectTypeName(projectType:ProjectType) {
+  public static getProjectTypeName(projectType: ProjectType) {
     switch (projectType) {
       case ProjectType.SentimentAnalysis:
-        return "Sentiment Analysis";
+        return 'Sentiment Analysis';
       case ProjectType.DocumentClassification:
-        return "Document Classification";
+        return 'Document Classification';
       case ProjectType.POSTagging:
-        return "Part of Speech Tagging";
+        return 'Part of Speech Tagging';
       case ProjectType.NERTagging:
-        return "Named-Entity Recognition Tagging";
+        return 'Named-Entity Recognition Tagging';
     }
   }
-} 
+}

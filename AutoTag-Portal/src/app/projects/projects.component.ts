@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog'
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { ProjectsService } from './projects.service';
 import { Project } from './project';
 import { NewProjectComponent } from '../new-project/new-project.component';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UpdateProjectComponent } from '../update-project/update-project.component';
 
 @Component({
   selector: 'app-projects',
@@ -17,7 +18,7 @@ export class ProjectsComponent implements OnInit {
   loading = false;
 
   constructor(public projectsService: ProjectsService, public fileUploadService: FileUploadService,
-     public dialog: MatDialog, private snackBar: MatSnackBar) { }
+              public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.refresh();
@@ -34,7 +35,7 @@ export class ProjectsComponent implements OnInit {
     let updatedProject: Project;
     if (this.selectedProject.uuid !== undefined) {
       updatedProject = await this.projectsService.updateProject(this.selectedProject);
-      // Only refresh if the task is to update the project. If a new project is created, 
+      // Only refresh if the task is to update the project. If a new project is created,
       // the page will be refreshed after document upload.
       await this.refresh();
     } else {
@@ -66,14 +67,19 @@ export class ProjectsComponent implements OnInit {
   }
 
   newProject() {
-    let newProjectDialogRef = this.dialog.open(NewProjectComponent, new MatDialogConfig());
+    const newProjectDialogRef = this.dialog.open(NewProjectComponent, new MatDialogConfig());
     let files: File[];
     newProjectDialogRef.afterClosed().subscribe(async result => {
-      this.selectedProject = result.project;
-      files = result.files;
-      let snackBarRef = this.snackBar.open(`Creating project "${this.selectedProject.name}" and uploading files`, 'Dismiss');
-      let newProject = await this.updateProject();
-      this.uploadFiles(files, newProject.uuid);
+      if (result) {
+        this.selectedProject = result.project;
+        files = result.files;
+        console.log(files);
+        const snackBarRef = this.snackBar.open(
+          `Creating project "${this.selectedProject.name}" and uploading files. Please do not close this tab.`,
+          'Dismiss');
+        const newProject = await this.updateProject();
+        this.uploadFiles(files, newProject.uuid);
+      }
     });
   }
 
@@ -81,7 +87,27 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject = project;
   }
 
+
+  onProjectUpdate(project: Project) {
+    const projectUpdateDialogRef = this.dialog.open(UpdateProjectComponent, {
+      data: {
+        project
+      }
+    });
+
+    projectUpdateDialogRef.afterClosed().subscribe(async result => {
+      if (result) {
+        const snackBarRef = this.snackBar.open(`Updating project "${project.name}"`,
+          'Dismiss');
+        this.selectedProject = result.project;
+        await this.updateProject();
+      }
+    });
+  }
+
   async onProjectDeleted(project: Project) {
+    const snackBarRef = this.snackBar.open(`Deleting project "${project.name}"`,
+          'Dismiss');
     this.loading = true;
     await this.projectsService.deleteProject(project.uuid);
     await this.refresh();
