@@ -1,6 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, createConnection, Connection, Repository, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
 import { Assignment } from './assignment';
 import { User } from './user';
+import { Tag } from './tag';
 
 @Entity()
 export class Project {
@@ -32,9 +33,6 @@ export class Project {
   taggedByLoc: string = "";
 
   @Column()
-  tags: string = "";
-
-  @Column()
   silverStandardLoc: string = "";
   
   @Column()
@@ -51,6 +49,9 @@ export class Project {
 
   @OneToMany(type => Assignment, assignment => assignment.project)
   assignments: Assignment[];
+
+  @OneToMany(type => Assignment, assignment => assignment.project)
+  tags: Tag[];
 
   @ManyToOne(type => User, user => user.owns)
   owner: User;
