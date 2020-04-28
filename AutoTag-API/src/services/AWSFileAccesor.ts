@@ -1,32 +1,22 @@
 import { Service, Inject } from 'typedi';
 import config from '../config';
+import { S3 } from 'aws-sdk';
 
 @Service()
 export default class AWSAccessorService {
 
-    constructor(
-        @Inject('s3Client') private s3Client
-    ) { }
+    // == Service Injection ==
+    @Inject('s3Client')
+    s3Client : S3; // S3 Client
 
-    tryUploadFile(fileDest : string, fileStream : BinaryType) : boolean {
-        var s3Params = {
-            Bucket : config.aws_bucket,
-            Key : fileDest,
-            Body : fileStream
-        };
 
-        this.s3Client.upload(s3Params, (err, data) => {
-            if(err){
-                // TODO: Log error.
-                return false;
-            }
-        });
+    // == HELPER METHODS ==
 
-        // TODO: Log success.
+    /*
+        TryDownloadStream
 
-        return true;
-    }
-
+        Helper method to download a file stream from AWS S3
+    */
     private async tryDownloadStream(filePath : string) : Promise<[boolean, ReadableStream]> {
 
         console.log("Downloading File Stream");
@@ -61,6 +51,39 @@ export default class AWSAccessorService {
         return [true, resp];
     }
 
+
+    // == PUBLIC SERVICE METHODS ==
+
+    /*
+        TryUploadFile
+
+        Sample Use:
+            const awsAccessorServiceInstance = Container.get(AwsAccessorService);
+
+            if(await awsAccessorServiceInstance.tryUploadFile("path/to/file"))
+            {
+                // ...
+            }
+    */
+    public async tryUploadFile(fileDest : string, fileStream : BinaryType) : Promise<boolean> {
+        var s3Params = {
+            Bucket : config.aws_bucket,
+            Key : fileDest,
+            Body : fileStream
+        };
+
+        this.s3Client.upload(s3Params, (err, data) => {
+            if(err){
+                // TODO: Log error.
+                return false;
+            }
+        });
+
+        // TODO: Log success.
+
+        return true;
+    }
+
     /*
         DownloadFileAsString
 
@@ -69,7 +92,7 @@ export default class AWSAccessorService {
 
             let awsFileContent = await awsAccessorServiceInstance.downloadFileAsString("path/to/file");
     */
-    async downloadFileAsString(filePath : string) : Promise<string> {
+    public async downloadFileAsString(filePath : string) : Promise<string> {
         console.log("Downloading File");
 
         let fileContent;
@@ -96,7 +119,7 @@ export default class AWSAccessorService {
 
             let awsFileContent = await awsAccessorServiceInstance.downloadFileAsList("path/to/file");
     */
-    async downloadFileAsList(filePath : string) : Promise<string[]> {
+    public async downloadFileAsList(filePath : string) : Promise<string[]> {
         console.log("Downloading File");
 
         let fileContent = [];
