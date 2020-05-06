@@ -65,15 +65,19 @@ export default class AWSAccessorService {
         // ...
       }
   */
-  public async tryUploadFile(fileDest: string, fileStream: BinaryType): Promise<boolean> {
+  public async tryUploadFile(fileDest: string, fileStream: Buffer): Promise<boolean> {
     var s3Params = {
       Bucket: config.aws_bucket,
       Key: fileDest,
       Body: fileStream
     };
 
+    console.log(`Bucket: ${config.aws_bucket}`);
+    console.log(`File Dest: ${fileDest}`);
+
     this.s3Client.upload(s3Params, (err, data) => {
       if (err) {
+        console.log(data);
         // TODO: Log error.
         return false;
       }
@@ -95,7 +99,7 @@ export default class AWSAccessorService {
   public async downloadFileAsString(filePath: string): Promise<string> {
     console.log("Downloading File");
 
-    let fileContent;
+    let fileContent : string;
 
     await this.tryDownloadStream(filePath).then(([success, stream]) => {
       if (!success) {
@@ -122,15 +126,13 @@ export default class AWSAccessorService {
   public async downloadFileAsList(filePath: string): Promise<string[]> {
     console.log("Downloading File");
 
-    let fileContent = [];
+    let fileContent : string[] = [];
 
     await this.tryDownloadStream(filePath).then(([success, stream]) => {
       if (!success) {
         // TODO: Log Error
         return null;
       }
-
-      console.log(stream);
 
       // TODO: Validate File Contents are Parsed Correctly.
       // TODO: Make this more efficient by reading directly from the stream ffs...

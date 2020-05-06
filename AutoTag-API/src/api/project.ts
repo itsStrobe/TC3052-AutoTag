@@ -2,6 +2,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { getRepository } from '../model/repository';
 import { Project } from '../model/project';
 import { User } from '../model/user';
+import { Tag } from '../model/tag';
+import Container from 'typedi';
+import ProjectFileManagerService from '../services/ProjectFileManager';
 
 export const projectRouter: Router = Router();
 
@@ -45,13 +48,20 @@ projectRouter.get('/project/:uuid', async function (req: Request, res: Response,
 });
 
 projectRouter.post('/project', async function (req: Request, res: Response, next: NextFunction) {
+  let projectFileManagerInstance = Container.get(ProjectFileManagerService);
+
   try {
     const repository = await getRepository(Project);
-    const project = new Project();
-    project.owner = new User();
-    project.owner.id = (req as any).user.id;
-    project.name = req.body.name;
-    project.description = req.body.description;
+    let tags : Tag[] = [];
+    for(let tag in req.body.tags) {
+      let newTag = new Tag();
+      newTag.tag = tag;
+
+      tags.push(newTag);
+    }
+    let owner = new User();
+    owner.id = (req as any).user.id;
+    const project = projectFileManagerInstance.InitializeProject(req.body.name, owner, req.body.description, req.body.projectType, req.body.dataFormat, tags);
 
     const result = await repository.save(project);
     console.log((req as any).user.name + ': Create project ' + project.uuid);
