@@ -470,7 +470,7 @@ export default class ProjectFileManagerService {
 
   /**
    * InitializeProject
-   *  Llamar al crear un nuevo proyecto. Guardar el Proyecto regresado en la DB
+   *  ENDPOINT -> Llamar al crear un nuevo proyecto. Guardar el Proyecto regresado en la DB
    * 
    * Create a Project Object based on Parameters.
    * Returns Project Object
@@ -495,7 +495,7 @@ export default class ProjectFileManagerService {
   
   /**
    * SetProjectFiles
-   *  Llamar al recibir la llamada de subida de archivos. Guardar el Proyecto actualizado en la DB.
+   *  ENDPOINT -> Llamar al recibir la llamada de subida de archivos. Guardar el Proyecto actualizado en la DB.
    * 
    * Create Files for a Generic Project in AWS.
    * 
@@ -521,7 +521,7 @@ export default class ProjectFileManagerService {
 
   /**
    * GetDataBatch
-   *  Llamar cuando el cliente pida Data para taggear. Enviar el JSON regresado como respuesta al cliente.
+   *  ENDPOINT -> Llamar cuando el cliente pida Data para taggear. Enviar el JSON regresado como respuesta al cliente.
    * 
    * Parameters:
    *  projectId - Guid: Id of project containing the desired data.
@@ -550,7 +550,7 @@ export default class ProjectFileManagerService {
   
   /**
    * UpdateTag
-   *  Llamar cuando recibamos una Tag del cliente. Guardar el Proyecto actualizado en la DB.
+   *  ENDPOINT -> Llamar cuando recibamos una Tag del cliente. Guardar el Proyecto actualizado en la DB.
    * 
    * Returns updated Project Object
    */
@@ -606,7 +606,7 @@ export default class ProjectFileManagerService {
 
   /**
    * GenerateProjectPreTags
-   *  Llamar cuando el cliente pida Pre-Taggear. Guardar el Proyecto actualizado en la DB.
+   *  ENDPOINT -> Llamar cuando el cliente pida Pre-Taggear. Guardar el Proyecto actualizado en la DB.
    * 
    * Calls the Pre-Tagged API to Update the Project
    * 
