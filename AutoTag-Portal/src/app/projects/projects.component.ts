@@ -6,6 +6,7 @@ import { NewProjectComponent } from '../new-project/new-project.component';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
+import { ProjectMainComponent } from '../project-main/project-main.component';
 
 @Component({
   selector: 'app-projects',
@@ -73,7 +74,6 @@ export class ProjectsComponent implements OnInit {
       if (result) {
         this.selectedProject = result.project;
         files = result.files;
-        console.log(files);
         const snackBarRef = this.snackBar.open(
           `Creating project "${this.selectedProject.name}" and uploading files. Please do not close this tab.`,
           'Dismiss');
@@ -85,6 +85,14 @@ export class ProjectsComponent implements OnInit {
 
   onProjectSelected(project: Project) {
     this.selectedProject = project;
+    const projectDialogRef = this.dialog.open(ProjectMainComponent, {
+      data: {
+        project
+      },
+      minWidth: 450,
+      maxWidth: 600,
+      autoFocus: false
+    });
   }
 
 

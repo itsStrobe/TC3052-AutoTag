@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Project } from '../projects/project';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-update-project',
@@ -22,6 +21,6 @@ export class UpdateProjectComponent {
   onSubmit() {
     this.project.name = this.newProjectForm.get('title').value;
     this.project.description = this.newProjectForm.get('description').value;
-    this.dialogRef.close(this.project);
+    this.dialogRef.close({project: this.project});
   }
 }

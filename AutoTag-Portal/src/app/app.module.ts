@@ -12,6 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRippleModule } from '@angular/material/core';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider } from 'angularx-social-login';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -35,6 +36,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { UpdateProjectComponent } from './update-project/update-project.component';
 import { ConfirmationDialogComponent } from './utils/dialog/confirmation-dialog/confirmation-dialog.component';
+import { ProjectMainComponent } from './project-main/project-main.component';
 
 
 const config = new AuthServiceConfig([
@@ -56,7 +58,8 @@ export function provideConfig() {
     ProjectsDashboardComponent,
     NewProjectComponent,
     UpdateProjectComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ProjectMainComponent
   ],
   imports: [
     AppRoutingModule,
@@ -85,11 +88,13 @@ export function provideConfig() {
     MatListModule,
     MatChipsModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatRippleModule
   ],
   entryComponents: [
     NewProjectComponent,
-    UpdateProjectComponent
+    UpdateProjectComponent,
+    ProjectMainComponent
   ],
   providers: [
     {

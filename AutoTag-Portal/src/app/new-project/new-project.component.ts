@@ -109,8 +109,6 @@ export class NewProjectComponent implements OnInit {
     newProject.type = this.newProjectForm.get('type').value;
     newProject.tags = this.newProjectForm.get('tags').value;
     newProject.created = new Date();
-    newProject.lastUpdate = new Date();
-    newProject.dataFormat = this.files[0].data.type;
 
     const filesData = this.files.map(file => file.data);
 

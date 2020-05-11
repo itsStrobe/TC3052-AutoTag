@@ -14,6 +14,8 @@ export class Project {
   created: Date;
   lastUpdate: Date;
   lastLabelSubmission: Date;
+  numTaggedRows: number;
+  numTotalRows: number;
 }
 
 export enum ProjectType {
