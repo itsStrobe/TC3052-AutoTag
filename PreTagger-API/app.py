@@ -6,13 +6,13 @@ from threading import Thread
 from PreTaggerOrchestrator import PreTaggerOrchestrator
 from PreTaggerEnums import FileType, ProjectType
 from PreTaggerKeywords import FileKeywords
+from config import EnvVariables
 
 # -- API MACROS --
 NAME = 'PreTagger'
 VER = 'v0.1'
-BUCKET_NAME = "autotag-storage-us-east"
 
-preTagger = PreTaggerOrchestrator(awsBucket=BUCKET_NAME)
+preTagger = PreTaggerOrchestrator(awsBucket=EnvVariables.BUCKET_NAME, awsRegion=EnvVariables.REGION_NAME, awsAccessKeyId=EnvVariables.AWS_ACCESS_KEY_ID, awsSecretAccessKey=EnvVariables.AWS_SECRET_ACCESS_KEY)
 
 app = Flask(__name__)
 
@@ -34,6 +34,8 @@ def index():
 @app.route(f"/{NAME}/debug/{VER}/DownloadFromBucket/", methods=['GET'])
 def DownloadFromBucket():
     requiredFields = ['fileLoc', 'fileDest']
+
+    print(f"Downloading from Bucket: {EnvVariables.BUCKET_NAME}")
 
     reqJSON = request.json
 
@@ -120,3 +122,6 @@ def bad_request(e):
 @app.errorhandler(404)
 def resource_not_found(e):
     return jsonify(error=str(e)), 404
+
+if __name__ == '__main__':
+    app.run(threaded=True, port=EnvVariables.PORT)
