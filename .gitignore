@@ -180,4 +180,7 @@ config/
 config.ts
 *.sqlite
 
+# Local Debugging
+run_locally.sh
+
 # See http://help.github.com/ignore-files/ for more about ignoring files.

@@ -25,14 +25,13 @@ The Pandas is structured as follows:
 """
 
 LOCAL_TMP_PREFIX = "./tmp/"
-BUCKET_NAME = ""
 
 class FileController:
 
-    def __init__(self, awsBucket : str = BUCKET_NAME):
+    def __init__(self, awsBucket : str = None, awsRegion : str = None, awsAccessKeyId : str = None, awsSecretAccessKey : str = None):
         self.AwsBucket = awsBucket
 
-        self.s3Client = boto3.client('s3')
+        self.s3Client = boto3.client('s3', region_name=awsRegion, aws_access_key_id=awsAccessKeyId, aws_secret_access_key=awsSecretAccessKey)
 
     @classmethod
     def WriteFile(cls, file, path : str, inTmpDir = False):
