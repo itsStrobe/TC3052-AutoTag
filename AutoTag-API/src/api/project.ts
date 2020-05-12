@@ -48,18 +48,18 @@ projectRouter.get('/project/:uuid', async function (req: Request, res: Response,
 });
 
 projectRouter.post('/project', async function (req: Request, res: Response, next: NextFunction) {
-  let projectFileManagerInstance = Container.get(ProjectFileManagerService);
+  const projectFileManagerInstance = Container.get(ProjectFileManagerService);
 
   try {
     const repository = await getRepository(Project);
-    let tags : Tag[] = [];
-    for(let tag in req.body.tags) {
-      let newTag = new Tag();
+    const tags : Tag[] = [];
+    for(const tag in req.body.tags) {
+      const newTag = new Tag();
       newTag.tag = tag;
 
       tags.push(newTag);
     }
-    let owner = new User();
+    const owner = new User();
     owner.id = (req as any).user.id;
     const project = projectFileManagerInstance.InitializeProject(req.body.name, owner, req.body.description, req.body.projectType, req.body.dataFormat, tags);
 
@@ -115,11 +115,22 @@ projectRouter.delete('/project/:uuid', async function (req: Request, res: Respon
 
 projectRouter.get('/project/:uuid/dataBatch', async function (req: Request, res: Response, next: NextFunction) {
   try {
-    const page = req.query.page;
+    const projectFileManagerInstance = Container.get(ProjectFileManagerService);
+    const repository = await getRepository(Project);
+    const project = await repository.findOne({ 
+      relations: ["owner"],
+      where: {
+          owner: { id: (req as any).user.id }, 
+          uuid: req.params.uuid,
+      },
+    });
+    const offset = req.query.offset;
     const limit = req.query.limit;
-    // TODO: Implement request
+
+    const dataBatch = await projectFileManagerInstance.GetDataBatch(project, offset, limit);
+
     console.log((req as any).user.email + ': Get project data batch ' + req.params.uuid);
-    res.send(null);
+    res.send(dataBatch);
   }
   catch (err) {
     return next(err);
@@ -128,9 +139,44 @@ projectRouter.get('/project/:uuid/dataBatch', async function (req: Request, res:
 
 projectRouter.post('/project/:uuid/dataTag', async function (req: Request, res: Response, next: NextFunction) {
   try {
-    // TODO: Implement request
+    const projectFileManagerInstance = Container.get(ProjectFileManagerService);
+    const repository = await getRepository(Project);
+    const project = await repository.findOne({ 
+      relations: ["owner"],
+      where: {
+          owner: { id: (req as any).user.id }, 
+          uuid: req.params.uuid,
+      },
+    });
+    const rowId = req.body.row;
+    const tag = req.body.tag;
+
+    const result = await projectFileManagerInstance.UpdateTag(project, rowId, tag);
+
     console.log((req as any).user.name + ': Update project data tag ' + req.params.id);
-    res.send(null);
+    res.send(result);
+  }
+  catch (err) {
+    return next(err);
+  }
+});
+
+projectRouter.post('/project/:uuid/generate', async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const projectFileManagerInstance = Container.get(ProjectFileManagerService);
+    const repository = await getRepository(Project);
+    const project = await repository.findOne({
+      relations: ["owner"],
+      where: {
+          owner: { id: (req as any).user.id }, 
+          uuid: req.params.uuid,
+      },
+    });
+
+    const result = await projectFileManagerInstance.GenerateProjectPreTags(project);
+
+    console.log((req as any).user.name + ': Generate project pre tags ' + req.params.id);
+    res.send(result);
   }
   catch (err) {
     return next(err);
