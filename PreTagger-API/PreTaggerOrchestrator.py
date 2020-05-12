@@ -51,4 +51,4 @@ class PreTaggerOrchestrator:
         self.fileController.WriteFile(pred, targetDir, inTmpDir=True)
         self.UploadFile(targetDir, inTmpDir=True)
 
-        return True
+        print("Finished Labeling")
