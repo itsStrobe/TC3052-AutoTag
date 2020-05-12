@@ -3,6 +3,7 @@ botocore==1.15.42
 click==7.1.1
 docutils==0.15.2
 Flask==1.1.2
+gunicorn==19.9.0
 itsdangerous==1.1.0
 Jinja2==2.11.2
 jmespath==0.9.5
