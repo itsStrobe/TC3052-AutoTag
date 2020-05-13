@@ -47,9 +47,11 @@ export class ProjectsService {
     return this.request('get', `${baseUrl}/project/${uuid}`);
   }
 
-  createProject(project: Project) {
-    console.log('createProject ' + JSON.stringify(project));
-    return this.request('post', `${baseUrl}/project`, project);
+  createProject(project: Project, files: File[]) {
+    const data = Object.assign(project);
+    data.files = files;
+    console.log('createProject ' + JSON.stringify(data));
+    return this.request('post', `${baseUrl}/project`, data);
   }
 
   updateProject(project: Project) {

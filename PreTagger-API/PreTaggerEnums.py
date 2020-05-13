@@ -7,7 +7,7 @@ class FileType(Enum):
 class ProjectType(Enum):
     SENTIMENT_ANALYSIS = 1
     TEXT_CLASSIFICATION = 2
-    NER_CLASSIFICATION = 3
+    NER_TAGGING = 3
     POS_TAGGING = 4
 
 class FileDataType(Enum):

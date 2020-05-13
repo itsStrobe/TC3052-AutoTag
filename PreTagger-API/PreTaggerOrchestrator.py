@@ -8,8 +8,8 @@ from PreTaggerEnums import FileType, ProjectType
 from ProjectManager import ProjectFactory
 
 class PreTaggerOrchestrator:
-    def __init__(self, awsBucket : str = None):
-        self.fileController = FileController(awsBucket=awsBucket)
+    def __init__(self, awsBucket : str = None, awsRegion : str = None, awsAccessKeyId : str = None, awsSecretAccessKey : str = None):
+        self.fileController = FileController(awsBucket=awsBucket, awsRegion=awsRegion, awsAccessKeyId=awsAccessKeyId, awsSecretAccessKey=awsSecretAccessKey)
 
     def setAwsBucket(self, awsBucket : str):
         self.fileController.setAwsBucket(awsBucket)
@@ -51,4 +51,4 @@ class PreTaggerOrchestrator:
         self.fileController.WriteFile(pred, targetDir, inTmpDir=True)
         self.UploadFile(targetDir, inTmpDir=True)
 
-        return True
+        print("Finished Labeling")

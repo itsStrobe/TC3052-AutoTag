@@ -1,17 +1,18 @@
 #!venv/bin/python3
 import os
 from flask import Flask, abort, jsonify, request
+from threading import Thread
 
 from PreTaggerOrchestrator import PreTaggerOrchestrator
 from PreTaggerEnums import FileType, ProjectType
 from PreTaggerKeywords import FileKeywords
+from config import EnvVariables
 
 # -- API MACROS --
 NAME = 'PreTagger'
 VER = 'v0.1'
-BUCKET_NAME = "autotag-storage-us-east"
 
-preTagger = PreTaggerOrchestrator(awsBucket=BUCKET_NAME)
+preTagger = PreTaggerOrchestrator(awsBucket=EnvVariables.BUCKET_NAME, awsRegion=EnvVariables.REGION_NAME, awsAccessKeyId=EnvVariables.AWS_ACCESS_KEY_ID, awsSecretAccessKey=EnvVariables.AWS_SECRET_ACCESS_KEY)
 
 app = Flask(__name__)
 
@@ -33,6 +34,8 @@ def index():
 @app.route(f"/{NAME}/debug/{VER}/DownloadFromBucket/", methods=['GET'])
 def DownloadFromBucket():
     requiredFields = ['fileLoc', 'fileDest']
+
+    print(f"Downloading from Bucket: {EnvVariables.BUCKET_NAME}")
 
     reqJSON = request.json
 
@@ -88,8 +91,8 @@ def Label():
         projType = ProjectType.SENTIMENT_ANALYSIS
     elif (reqJSON['projectType'] == "Text Classification"):
         projType = ProjectType.TEXT_CLASSIFICATION
-    elif (reqJSON['projectType'] == "NER Classification"):
-        projType = ProjectType.NER_CLASSIFICATION
+    elif (reqJSON['projectType'] == "NER Tagging"):
+        projType = ProjectType.NER_TAGGING
     elif (reqJSON['projectType'] == "POS Tagging"):
         projType = ProjectType.POS_TAGGING
 
@@ -99,15 +102,14 @@ def Label():
     tagsDir = os.path.join(projDir, reqJSON['tagsFile'])
     predDir = os.path.join(projDir, FileKeywords.SILVER_STANDARD_FILE)
 
-    preTagger.LabelOrchestrator(dataDir, tagsDir, predDir, fileType, projType)
-    
-    pretagDir = {
-        "status" : 200,
-        "message" : f"File with Silver Standard successfully created.",
-        "silver_standard" : predDir
+    Thread(target=preTagger.LabelOrchestrator, args=(dataDir, tagsDir, predDir, fileType, projType, )).start()
+
+    resp_data = {
+        "message" : f"File with Silver Standard is being created.",
+        "silver_standard" : FileKeywords.SILVER_STANDARD_FILE
     }
 
-    return jsonify(pretagDir)
+    return jsonify(resp_data), 202
 
 # -- ERROR HANDLING --
 
@@ -120,3 +122,6 @@ def bad_request(e):
 @app.errorhandler(404)
 def resource_not_found(e):
     return jsonify(error=str(e)), 404
+
+if __name__ == '__main__':
+    app.run(threaded=True, port=EnvVariables.PORT)
