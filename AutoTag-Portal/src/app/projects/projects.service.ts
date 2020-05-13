@@ -36,10 +36,10 @@ export class ProjectsService {
 
   getProjects() {
     // Dummy projects file for development.
-    return new Promise<any>((resolve, reject) => {
-      this.http.request('get', 'assets/projects-test.json')
-      .subscribe(resolve as any, reject as any);
-    });
+    // return new Promise<any>((resolve, reject) => {
+    //   this.http.request('get', 'assets/projects-test.json')
+    //   .subscribe(resolve as any, reject as any);
+    // });
     return this.request('get', `${baseUrl}/project`);
   }
 
