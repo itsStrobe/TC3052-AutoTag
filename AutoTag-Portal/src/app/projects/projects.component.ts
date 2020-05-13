@@ -89,8 +89,8 @@ export class ProjectsComponent implements OnInit {
       data: {
         project
       },
-      minWidth: 450,
-      maxWidth: 600,
+      minWidth: '35vw',
+      maxWidth: '50vw',
       autoFocus: false
     });
   }

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Project, ProjectTypeUtil } from '../projects/project';
+import { ManualTagComponent } from '../manual-tag/manual-tag.component';
 
 const minTagPercentForAutoTag = 30;
 const hundredPercent = 100;
@@ -16,7 +17,7 @@ export class ProjectMainComponent implements OnInit {
   completion: number;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              public dialogRef: MatDialogRef<ProjectMainComponent>) { }
+              public dialogRef: MatDialogRef<ProjectMainComponent>, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.projectType = ProjectTypeUtil.getProjectTypeName(this.project.type);
@@ -43,5 +44,14 @@ export class ProjectMainComponent implements OnInit {
       return 'Tag all of the examples to enable';
     }
     return 'Download project as a JSON';
+  }
+
+  manualTag() {
+    const manualTagDialogRef = this.dialog.open(ManualTagComponent, {
+      data: { project: this.project },
+      minWidth: '400px',
+      maxWidth: '60vw',
+      autoFocus: false
+    });
   }
 }
