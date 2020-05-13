@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
 import { Project } from './project';
 import { take } from 'rxjs/operators';
+import { FileUtils } from '../utils/file-utils/file-utils';
 
 const baseUrl = 'http://localhost:4201';
 
@@ -47,9 +48,10 @@ export class ProjectsService {
     return this.request('get', `${baseUrl}/project/${uuid}`);
   }
 
-  createProject(project: Project, files: File[]) {
+  async createProject(project: Project, files: File[]) {
     const data = Object.assign(project);
-    data.files = files;
+    const fileObjects = await FileUtils.prepareFiles(files);
+    data.files = fileObjects;
     console.log('createProject ' + JSON.stringify(data));
     return this.request('post', `${baseUrl}/project`, data);
   }

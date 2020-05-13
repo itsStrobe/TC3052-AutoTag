@@ -106,12 +106,12 @@ export class NewProjectComponent implements OnInit {
     const newProject = new Project();
     newProject.name = this.newProjectForm.get('title').value;
     newProject.description = this.newProjectForm.get('description').value;
-    newProject.type = this.newProjectForm.get('type').value;
+    newProject.type = Number(this.newProjectForm.get('type').value);
     newProject.tags = this.newProjectForm.get('tags').value;
     newProject.projectDataFormat =
       this.files[0].data.type === 'text/plain' ? ProjectDataFormat.TXT : ProjectDataFormat.CSV;
     const filesData = this.files.map(file => file.data);
-
+    console.log(newProject);
     this.dialogRef.close({ project: newProject, files: filesData });
   }
 }
