@@ -3,8 +3,7 @@ export class Project {
   name: string;
   description: string;
   type: number;
-  dataFormat: string;
-  projectDataFormat: string;
+  projectDataFormat: number;
   projectDataLoc: string;
   tagsLoc: string;
   taggedByLoc: string;
@@ -14,6 +13,8 @@ export class Project {
   created: Date;
   lastUpdate: Date;
   lastLabelSubmission: Date;
+  numTaggedRows: number;
+  numTotalRows: number;
 }
 
 export enum ProjectType {
@@ -21,6 +22,11 @@ export enum ProjectType {
   DocumentClassification,
   POSTagging,
   NERTagging
+}
+
+export enum ProjectDataFormat {
+  CSV = 0,
+  TXT
 }
 
 export class ProjectTypeUtil {

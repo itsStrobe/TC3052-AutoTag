@@ -33,7 +33,7 @@ export class FileUploadService {
     });
   }
 
-  public uploadFiles(files, uuid: string) {
+  public uploadFiles(files: File[], uuid: string) {
     return this.request('post', `${baseUrl}/file-upload/${uuid}`, files);
   }
 

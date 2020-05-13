@@ -14,7 +14,9 @@
         "status": 1,
         "created": "2014-01-01T23:28:56.782Z",
         "lastUpdate": "2014-01-01T23:28:56.782Z",
-        "lastLabelSubmission": "2014-01-01T23:28:56.782Z"
+        "lastLabelSubmission": "2014-01-01T23:28:56.782Z",
+        "numTaggedRows": 60,
+        "numTotalRows": 100
     },
     {
         "uuid": "2",
@@ -31,7 +33,9 @@
         "status": 1,
         "created": "2014-01-01T23:28:56.782Z",
         "lastUpdate": "2014-01-01T23:28:56.782Z",
-        "lastLabelSubmission": "2014-01-01T23:28:56.782Z"
+        "lastLabelSubmission": "2014-01-01T23:28:56.782Z",
+        "numTaggedRows": 35,
+        "numTotalRows": 60
     },
     {
         "uuid": "3",
@@ -48,6 +52,8 @@
         "status": 1,
         "created": "2014-01-01T23:28:56.782Z",
         "lastUpdate": "2014-01-01T23:28:56.782Z",
-        "lastLabelSubmission": "2014-01-01T23:28:56.782Z"
+        "lastLabelSubmission": "2014-01-01T23:28:56.782Z",
+        "numTaggedRows": 40,
+        "numTotalRows": 490
     }
 ]
