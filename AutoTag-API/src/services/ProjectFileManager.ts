@@ -16,19 +16,19 @@ const FILE_TAGS = "tags.csv";
 const FILE_PRETAGS = "silver_standard.csv";
 const FILE_DATA_INDEX = "data_index.csv";
 
-enum ProjectType {
+export enum ProjectType {
   SentimentAnalysis = 0,
   TextClassification = 1,
   POSTagging = 2,
   NERTagging = 3
 }
 
-enum DataFormat {
+export enum DataFormat {
   CSV = 0,
   TXT = 1
 }
 
-enum Status {
+export enum Status {
   NotTagged = 0,
   PreTagged = 1,
   Tagged = 2
@@ -197,15 +197,19 @@ export default class ProjectFileManagerService {
    * 
    * Returns Updated Object
    */
-  private async SetCSVProjectFiles(project : Project, fileName : string, fileContent : Buffer) : Promise<Project> {
+  private async SetCSVProjectFiles(project : Project, file : any) : Promise<Project> {
     let awsClientInstance = Container.get(AWSAccessorService);
 
     // Project Root Path
     const projectDir = `${project.owner.id}/${project.uuid}/`;
-    
+
+    // Trim any extra New Lines form File Content
+    file.content = file.content.trim();
 
     // Upload Data File
-    const dataFilePath : string = projectDir + fileName;
+    const dataFilePath : string = projectDir + file.name;
+    const fileContent = Buffer.from(file.content); // Parse into Buffer for Uploading
+
     if(await awsClientInstance.tryUploadFile(dataFilePath, fileContent)) {
       // TODO: Log success;
     }
@@ -215,12 +219,12 @@ export default class ProjectFileManagerService {
     }
 
     // Set the project's Data Location
-    project.projectDataLoc = fileName;
+    project.projectDataLoc = file.name;
 
     
     // Initialize Default Tags File
     let tags : string = "";
-    const numRows : number = fileContent.toString().split(/(?:\r\n|\r|\n)/g).length;
+    const numRows : number = file.content.split(/(?:\r\n|\r|\n)/g).length;
 
     for (let idx = 0; idx < numRows - 1; idx++) {
       tags += DEFAULT_TAGS_ROW_CONTENTS + '\n';
@@ -272,12 +276,7 @@ export default class ProjectFileManagerService {
    * 
    * Returns Updated Object
    */
-  private async SetTXTProjectFiles(project : Project, fileNames : string[], filesContent : Buffer[]) : Promise<Project> {
-
-    if(fileNames.length != filesContent.length) {
-      // TODO: Log Disparity in files names and content list
-      return null; 
-    }
+  private async SetTXTProjectFiles(project : Project, files : any[]) : Promise<Project> {
 
     let awsClientInstance = Container.get(AWSAccessorService);
 
@@ -285,34 +284,40 @@ export default class ProjectFileManagerService {
     const projectDir = `${project.owner.id}/${project.uuid}/`;
 
     // Get Number of Files
-    const numFiles : number = fileNames.length;
+    const numFiles : number = files.length;
 
     // Upload Data Files
-    let dataFilePath : string = "";
-    for(let idx = 0; idx < numFiles; idx++) {
-      dataFilePath = projectDir + fileNames[idx];
+    files.forEach(async file => {
+      const dataFilePath = projectDir + file.name;
+      const fileContent = Buffer.from(file.content);
 
-      if(await awsClientInstance.tryUploadFile(dataFilePath, filesContent[idx])) {
+      if(await awsClientInstance.tryUploadFile(dataFilePath, fileContent)) {
         // TODO: Log success;
       }
       else {
         // TODO: Log Failure;
         return null;
       }
-    }
+    });
 
+    let fileNamesString : string = ""; // Initialize Data Index File
+    let tags : string = ""; // Initialize Default Tags File
 
-    // Initialize Data Index File
-    let fileNamesString : string = "";
-    for(let idx = 0; idx < numFiles - 1; idx++) {
-      fileNamesString += fileNames[idx] + '\n';
-    }
-    fileNamesString += fileNames[numFiles - 1];
+    files.forEach(file => {
+      fileNamesString += file.name + '\n'; // Add Name to Index File
 
-    const fileNamesContent = this.StringToBuffer(fileNamesString);
+      tags += DEFAULT_TAGS_ROW_CONTENTS + '\n' // Add Default Row at File Index
+    });
+    
+    // Trim any extra New Lines form File Content
+    fileNamesString = fileNamesString.trim();
+    tags = tags.trim();
+
 
     // Upload Data Index File
     const dataIndexFilePath = projectDir + FILE_DATA_INDEX;
+    const fileNamesContent = this.StringToBuffer(fileNamesString);
+
     if(await awsClientInstance.tryUploadFile(dataIndexFilePath, fileNamesContent)) {
       // TODO: Log success;
     }
@@ -323,20 +328,12 @@ export default class ProjectFileManagerService {
 
     // Set the project's Data Location
     project.projectDataLoc = FILE_DATA_INDEX;
-
     
-    // Initialize Default Tags File
-    let tags : string = "";
 
-    for (let idx = 0; idx < numFiles - 1; idx++) {
-      tags += DEFAULT_TAGS_ROW_CONTENTS + '\n';
-    }
-    tags += DEFAULT_TAGS_ROW_CONTENTS;
-
-    const tagsContent = this.StringToBuffer(tags);
-    
     // Upload Default Tag File
     const tagFilePath = projectDir + FILE_TAGS;
+    const tagsContent = this.StringToBuffer(tags);
+
     if(await awsClientInstance.tryUploadFile(tagFilePath, tagsContent)) {
       // TODO: Log success;
     }
@@ -361,8 +358,6 @@ export default class ProjectFileManagerService {
 
     // Set the project's Pre-Tags Location
     project.projectDataLoc = FILE_PRETAGS;
-
-    // awsClientInstance.tryUploadFile()
 
     return project;
   }
@@ -475,15 +470,15 @@ export default class ProjectFileManagerService {
    * Create a Project Object based on Parameters.
    * Returns Project Object
    */
-  public InitializeProject(name : string, owner : User, description : string, projectType : string, dataFormat : string, tags : Tag[]) : Project {
+  public InitializeProject(name : string, owner : User, description : string, projectType : ProjectType, dataFormat : DataFormat, tags : Tag[]) : Project {
     let project = new Project();
 
     // User Defined Properties
     project.name = name;
     project.owner = owner;
     project.description = description;
-    project.type = this.TextToProjectType(projectType);
-    project.projectDataFormat = dataFormat; // TODO: Project.projectDataFormat must be a number
+    project.type = projectType.valueOf();
+    project.projectDataFormat = this.DataFormatToText(dataFormat); // TODO: Project.projectDataFormat must be a number
     project.tags = tags;
     project.status = Status.NotTagged;
 
@@ -501,18 +496,15 @@ export default class ProjectFileManagerService {
    * 
    * Returns Updated Object
    */
-  public async SetProjectFiles(project : Project, fileNames : string[], filesContent : Buffer[]) : Promise<Project> {
-    if(!fileNames || !filesContent) {
-      // TODO: Log Null Contents
-      return null;
-    }
-
-    switch (this.TextToDataFormat(project.dataFormat)) {
+  public async SetProjectFiles(project : Project, files : any[]) : Promise<Project> {
+    console.log(project.projectDataFormat);
+    console.log(this.TextToDataFormat(project.projectDataFormat));
+    switch (this.TextToDataFormat(project.projectDataFormat)) {
       case DataFormat.CSV:
-        return await this.SetCSVProjectFiles(project, fileNames[0], filesContent[0]);
+        return await this.SetCSVProjectFiles(project, files[0]);
 
       case DataFormat.TXT:
-        return await this.SetTXTProjectFiles(project, fileNames, filesContent);
+        return await this.SetTXTProjectFiles(project, files);
     
       default:
         return null;
@@ -536,7 +528,7 @@ export default class ProjectFileManagerService {
    *    Tag - string : Existing Tag (null if NotTagged).
    */
   public async GetDataBatch(project : Project, batchStart : number, batchSize : number) : Promise<string> {
-    switch (this.TextToDataFormat(project.dataFormat)) {
+    switch (this.TextToDataFormat(project.projectDataFormat)) {
       case DataFormat.CSV:
         return JSON.stringify(await this.GetCSVDataBatch(project, batchStart, batchSize));
 
@@ -616,7 +608,7 @@ export default class ProjectFileManagerService {
     // requiredFields = ['userId', 'projectId', 'fileType', 'projectType', 'dataFile', 'tagsFile']
     let userId = project.owner.id.toString();
     let projectId = project.uuid;
-    let fileType = project.dataFormat;
+    let fileType = project.projectDataFormat;
     let projectType = this.ProjectTypeToText(project.type);
     let dataFile = project.projectDataLoc;
     let tagsFile = project.tagsLoc;
