@@ -482,9 +482,6 @@ export default class ProjectFileManagerService {
     project.tags = tags;
     project.status = Status.NotTagged;
 
-    // Automatic Properties
-    // TODO:
-
     return project;
   }
   
