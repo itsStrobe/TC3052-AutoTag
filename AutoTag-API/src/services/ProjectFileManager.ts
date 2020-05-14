@@ -509,6 +509,30 @@ export default class ProjectFileManagerService {
   }
 
   /**
+   * DeleteProjectFiles
+   */
+  public async DeleteProjectFiles(project : Project) : Promise<void> {
+    const awsClientInstance = Container.get(AWSAccessorService);
+
+    // Project Root Path
+    const projectDir = `${project.owner.id}/${project.uuid}/`;
+
+    try{
+      if(await awsClientInstance.tryDeleteDirectory(projectDir)) {
+        // TODO: Log success;
+      }
+      else {
+        // TODO: Log Failure;
+        throw new Error(`Files of Project 'project.uuid=${project.uuid}' were not deleted.`)
+      }
+    }
+    catch(err){
+      console.log(err);
+      throw new Error(`Files of Project 'project.uuid=${project.uuid}' were not deleted.`)
+    }
+  }
+
+  /**
    * GetDataBatch
    *  ENDPOINT -> Llamar cuando el cliente pida Data para taggear. Enviar el JSON regresado como respuesta al cliente.
    * 
