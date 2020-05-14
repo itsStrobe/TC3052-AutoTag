@@ -5,6 +5,7 @@ import { User } from '../model/user';
 import { Tag } from '../model/tag';
 import Container from 'typedi';
 import ProjectFileManagerService from '../services/ProjectFileManager';
+import { ProjectType, DataFormat } from '../services/ProjectFileManager';
 
 export const projectRouter: Router = Router();
 
@@ -50,6 +51,8 @@ projectRouter.get('/project/:uuid', async function (req: Request, res: Response,
 projectRouter.post('/project', async function (req: Request, res: Response, next: NextFunction) {
   const projectFileManagerInstance = Container.get(ProjectFileManagerService);
 
+  console.log(req.body);
+
   try {
     const repository = await getRepository(Project);
     const tags : Tag[] = [];
@@ -61,9 +64,17 @@ projectRouter.post('/project', async function (req: Request, res: Response, next
     }
     const owner = new User();
     owner.id = (req as any).user.id;
-    const project = projectFileManagerInstance.InitializeProject(req.body.name, owner, req.body.description, req.body.projectType, req.body.dataFormat, tags);
+    const projectType : ProjectType = req.body.type;
+    const projectDataFormat : DataFormat = req.body.projectDataFormat;
 
-    const result = await repository.save(project);
+    // Initialize Project
+    const project = projectFileManagerInstance.InitializeProject(req.body.name, owner, req.body.description, projectType, projectDataFormat, tags);
+    const result_init = await repository.save(project);
+
+    // Add Files to Project
+    const project_addedFiles = await projectFileManagerInstance.SetProjectFiles(project, req.body.files);
+    const result = await repository.save(project_addedFiles);
+    
     console.log((req as any).user.name + ': Create project ' + project.uuid);
     res.send(result);
   }
