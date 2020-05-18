@@ -50,7 +50,7 @@ export class Project {
   @OneToMany(type => Assignment, assignment => assignment.project)
   assignments: Assignment[];
 
-  @OneToMany(type => Assignment, assignment => assignment.project)
+  @OneToMany(type => Tag, tag => tag.project)
   tags: Tag[];
 
   @ManyToOne(type => User, user => user.owns)
