@@ -111,7 +111,6 @@ export class NewProjectComponent implements OnInit {
     newProject.projectDataFormat =
       this.files[0].data.type === 'text/plain' ? ProjectDataFormat.TXT : ProjectDataFormat.CSV;
     const filesData = this.files.map(file => file.data);
-    console.log(newProject);
     this.dialogRef.close({ project: newProject, files: filesData });
   }
 }
