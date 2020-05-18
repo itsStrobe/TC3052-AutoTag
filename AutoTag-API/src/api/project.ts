@@ -107,6 +107,7 @@ projectRouter.post('/project/:uuid', async function (req: Request, res: Response
 
 projectRouter.delete('/project/:uuid', async function (req: Request, res: Response, next: NextFunction) {
   try {
+    const projectFileManagerInstance = Container.get(ProjectFileManagerService);
     const repository = await getRepository(Project);
     const project = await repository.findOne({ 
       relations: ["owner"],
@@ -115,6 +116,7 @@ projectRouter.delete('/project/:uuid', async function (req: Request, res: Respon
           uuid: req.params.uuid,
       },
     });
+    await projectFileManagerInstance.DeleteProjectFiles(project);
     await repository.delete(project.uuid);
     console.log((req as any).user.name + ': Delete project ' + req.params.uuid);
     res.send(null);
