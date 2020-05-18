@@ -13,7 +13,7 @@ projectRouter.get('/project', async function (req: Request, res: Response, next:
   try {
     const repository = await getRepository(Project);
     const allProjects = await repository.find({ 
-      relations: ["owner"],
+      relations: ["owner", "tags"],
       where: {
           owner: { id: (req as any).user.id }, 
       },
@@ -52,16 +52,18 @@ projectRouter.post('/project', async function (req: Request, res: Response, next
   const projectFileManagerInstance = Container.get(ProjectFileManagerService);
 
   console.log(req.body);
-
   try {
-    const repository = await getRepository(Project);
+    // Initialize Tags
     const tags : Tag[] = [];
-    for(const tag in req.body.tags) {
+    const tags_repository = await getRepository(Tag);
+    for (const tag in req.body.tags) {
       const newTag = new Tag();
-      newTag.tag = tag;
-
+      newTag.tag = req.body.tags[tag];
+      await tags_repository.save(newTag);
       tags.push(newTag);
     }
+
+    const repository = await getRepository(Project);
     const owner = new User();
     owner.id = (req as any).user.id;
     const projectType : ProjectType = req.body.type;
@@ -69,13 +71,14 @@ projectRouter.post('/project', async function (req: Request, res: Response, next
 
     // Initialize Project
     const project = projectFileManagerInstance.InitializeProject(req.body.name, owner, req.body.description, projectType, projectDataFormat, tags);
-    const result_init = await repository.save(project);
+    await repository.save(project);
 
     // Add Files to Project
     const project_addedFiles = await projectFileManagerInstance.SetProjectFiles(project, req.body.files);
     const result = await repository.save(project_addedFiles);
     
     console.log((req as any).user.name + ': Create project ' + project.uuid);
+    console.log(result);
     res.send(result);
   }
   catch (err) {
@@ -110,12 +113,19 @@ projectRouter.delete('/project/:uuid', async function (req: Request, res: Respon
     const projectFileManagerInstance = Container.get(ProjectFileManagerService);
     const repository = await getRepository(Project);
     const project = await repository.findOne({ 
-      relations: ["owner"],
+      relations: ["owner", "tags"],
       where: {
           owner: { id: (req as any).user.id }, 
           uuid: req.params.uuid,
       },
     });
+
+    // Delete Tags
+    const tags_repository = await getRepository(Tag);
+    project.tags.forEach(async tag => {
+      await tags_repository.delete(tag.uuid);
+    });
+
     await projectFileManagerInstance.DeleteProjectFiles(project);
     await repository.delete(project.uuid);
     console.log((req as any).user.name + ': Delete project ' + req.params.uuid);
