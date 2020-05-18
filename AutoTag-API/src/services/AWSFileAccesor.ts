@@ -66,7 +66,7 @@ export default class AWSAccessorService {
       }
   */
   public async tryUploadFile(fileDest: string, fileStream: Buffer): Promise<boolean> {
-    var s3Params = {
+    const s3Params = {
       Bucket: config.aws_bucket,
       Key: fileDest,
       Body: fileStream
@@ -77,7 +77,7 @@ export default class AWSAccessorService {
 
     this.s3Client.upload(s3Params, (err, data) => {
       if (err) {
-        console.log(data);
+        console.log(err);
         // TODO: Log error.
         return false;
       }
@@ -85,6 +85,82 @@ export default class AWSAccessorService {
 
     // TODO: Log success.
 
+    return true;
+  }
+
+  /**
+   * deleteDirectory
+   */
+  public async tryDeleteDirectory(directory: string): Promise<boolean> {
+    let objsToDelete : any[] = [];
+
+    // List All Objects with Directory Prefix
+    // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#listObjectsV2-property
+
+    const listObjectsV2 = dir => {
+      return new Promise<S3.ObjectList>((resolve, reject) => {
+        this.s3Client.listObjectsV2({
+          Bucket: config.aws_bucket,
+          Prefix: dir
+        }, (err, data) => {
+          if (err) {
+            reject(err);
+          }
+          else {
+            resolve(data.Contents);
+          }
+        })
+      })
+    };
+
+    try {
+      const objects = await listObjectsV2(directory);
+      objects.forEach(obj => {
+        objsToDelete.push({
+          Key: obj.Key
+        });
+      });
+    }
+    catch(err){
+      console.error(err);
+      return false;
+    }
+
+    // Delete Listed Objects
+    // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObjects-property
+
+    const deleteObjects = objects => {
+      return new Promise<S3.DeletedObjects>((resolve, reject) => {
+        this.s3Client.deleteObjects({
+          Bucket: config.aws_bucket,
+          Delete: {
+            Objects: objsToDelete,
+            Quiet: false
+          }
+        }, (err, data) => {
+          if (err) {
+            reject(err);
+          }
+          else {
+            resolve(data.Deleted);
+          }
+        })
+      })
+    };
+
+    try {
+      const deletedObjects = await deleteObjects(objsToDelete);
+      console.log("Deleted Objects");
+      deletedObjects.forEach(obj => {
+        console.log(obj);
+      });
+    }
+    catch(err){
+      console.error(err);
+      return false;
+    }
+
+    // TODO: Log success.
     return true;
   }
 
