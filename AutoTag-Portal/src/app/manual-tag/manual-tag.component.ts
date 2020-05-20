@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/co
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Project } from '../projects/project';
 import { MatPaginator } from '@angular/material/paginator';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, startWith } from 'rxjs/operators';
 import { RowService } from '../row/row.service';
 import { Row } from '../row/row';
 
@@ -27,13 +27,12 @@ export class ManualTagComponent implements OnInit, AfterViewInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public rowService: RowService) { }
 
   ngOnInit(): void {
-    this.tags = this.project.tags;
-    console.log(this.project);
-    console.log(this.tags);
+    this.tags = this.project.tags.map(tagObject => tagObject.tag);
   }
 
   ngAfterViewInit() {
     this.paginator.page.pipe(
+      startWith({}),
       switchMap(() => {
         this.loadingResults = true;
         return this.rowService.getDataBatch(this.project.uuid,
@@ -64,7 +63,7 @@ export class ManualTagComponent implements OnInit, AfterViewInit {
   }
 
   previousExample() {
-    this.selectedRow;
+
   }
 
   nextExample() {
