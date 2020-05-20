@@ -1,8 +1,10 @@
-.hero {
-    text-align: center;
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-family: sans-serif;
-  }
+@import '~@angular/material/theming';
+
+.title {
+  font-size: 40px;
+}
+
+.description {
+  color: lightgrey;
+  text-align: justify;
+}
