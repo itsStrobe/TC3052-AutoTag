@@ -1,34 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, GoogleLoginProvider, SocialUser, FacebookLoginProvider } from 'angularx-social-login';
+import { LoginService } from './login/login.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   public title = 'AutoTag';
-  public isAuthenticated: boolean;
+  public isAuthenticated = false;
 
-  constructor(public authService: AuthService) {}
-
-  ngOnInit() {
-    this.authService.authState.subscribe((user) => {
-      this.isAuthenticated = (user != null);
+  constructor(public loginService: LoginService) {
+    loginService.isAuthenticated().subscribe((value) => {
+      this.isAuthenticated = value;
     });
-  }
-
-  login() {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
-      .then(x => {
-        console.log(x);
-      })
-      .catch(x => {
-        console.log(x);
-      });
-  }
-
-  logout() {
-    this.authService.signOut().then(x => console.log(x));
   }
 }
