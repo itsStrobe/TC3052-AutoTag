@@ -8,4 +8,4 @@ class EnvVariables:
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
     # SERVER SETTINGS
-    PORT = os.environ.get('PRETAGGER_PORT')
+    PORT = os.environ.get('PORT')

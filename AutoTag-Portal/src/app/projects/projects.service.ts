@@ -4,8 +4,9 @@ import { AuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-lo
 import { Project } from './project';
 import { take } from 'rxjs/operators';
 import { FileUtils } from '../utils/file-utils/file-utils';
+import config from '../../config';
 
-const baseUrl = 'http://localhost:4201';
+const baseUrl = config.baseUrl;
 
 @Injectable({
   providedIn: 'root'

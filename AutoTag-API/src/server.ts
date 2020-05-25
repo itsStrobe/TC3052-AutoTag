@@ -7,8 +7,6 @@ import { projectRouter } from './api/project';
 import config from './config';
 import { Container } from 'typedi';
 import AwsAccessorService from './services/AWSFileAccesor';
-import ProjectFileManager from './services/ProjectFileManager';
-import AWSAccessorService from './services/AWSFileAccesor';
 
 const app = express()
   .use(cors())
@@ -36,11 +34,7 @@ app.get(`${pjson.name}/debug/${pjson.version}/DownloadFromBucket/`, async (req, 
   return res.status(200).json(awsFile);
 });
 
-app.listen(config.port, async (err) => {
-  if (err) {
-    return console.log(err);
-  }
-
+app.listen(config.port, async () => {
   // Run loaders
   require('./loaders').default();
 
