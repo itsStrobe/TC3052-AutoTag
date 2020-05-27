@@ -16,6 +16,11 @@ table {
   cursor: pointer;
 }
 
+.align-text-icon {
+  display: flex;
+  align-items: center;
+}
+
 .content-cell {
   vertical-align: top;
 }
@@ -37,5 +42,9 @@ table {
 
 .action-buttons-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.small-icon {
+  transform: scale(0.8);
 }

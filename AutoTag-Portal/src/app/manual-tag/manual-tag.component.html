@@ -13,7 +13,12 @@
           <th mat-header-cell *matHeaderCellDef> Training examples </th>
           <td mat-cell matRipple class="example-cell" *matCellDef="let row" (click)="selectExample(row)"
             [style.color]="tagToColor(row.tag)">
-            {{row.dataName}} </td>
+            <div class="align-text-icon">
+              {{row.dataName}} &nbsp;
+              <mat-icon *ngIf="row.status === 'PreTagged'" fontSet="material-icons-outlined">announcement</mat-icon>
+              <mat-icon *ngIf="row.status === 'Tagged'">check_circle_outline</mat-icon>
+            </div>
+          </td>
         </ng-container>
 
         <!-- Example content column -->
@@ -36,6 +41,10 @@
     <mat-paginator [pageSize]="5" [length]="project.numTotalRows"></mat-paginator>
   </div>
   <div class="action-buttons-container">
+    <div class="align-text-icon mat-caption">
+      <mat-icon class="small-icon" fontSet="material-icons-outlined">announcement</mat-icon> Pretagged, needs revision &nbsp;
+      <mat-icon class="small-icon">check_circle_outline</mat-icon> Tagged
+    </div>
     <div>
       <button mat-button (click)="previousExample()"> Previous </button>&nbsp;
       <button mat-button (click)="nextExample()"> Next </button>
